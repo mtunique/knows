@@ -10,10 +10,6 @@ class ArticleItem(Item):
     where = Field()
     #short summery of the article
     desc = Field()
-
+    #when it's an article,it contains the content&pics
+    #when it's a question&answer, it contains the best one
     content = Field()
-    #----------------------------------------
-    #the following are items specially used for Q&A platform
-    #----------------------------------------
-    problem = Field()
-    solution = Field()
