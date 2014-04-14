@@ -1,3 +1,3 @@
 knows
 =====
-Android app knows server by mtunique at uniquestudio.
+Android app knows server by mtunique.
