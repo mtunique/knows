@@ -24,5 +24,14 @@ class GroupTestSpider(CrawlSpider):
         sel = Selector(response)
 
         item = ArticleItem()
+
         item['content'] = sel.xpath('//div[@class="content"]')[0].extract()
+
+        item['formsite'] = 'cnBeta'
+
+        item['link'] = response.url
+
+        item['date'] = sel.xpath('//span[@class="date"]/text()')[0].extract()
+
+        item['title'] = sel.xpath('//title/text()')[0].extract()
         return item

@@ -9,7 +9,7 @@ from knows.items import ArticleItem
 class KrDemoCrawler(CrawlSpider):
     name = "kr"
     allowed_domains = [
-        "36kr.com"
+        "36kr"
     ]
 
     start_urls = [
@@ -32,9 +32,9 @@ class KrDemoCrawler(CrawlSpider):
         #q = []
         item['date'] = p
 
-        item['sitename'] = '36Kr'
+        item['formsite'] = '36Kr'
 
-        item['where'] = sel.xpath('//head/meta[@name="twitter:url"]/@content').extract()
+        item['link'] = response.url
 
         item['content'] = sel.xpath('//section[@class="article"]').extract()
 
