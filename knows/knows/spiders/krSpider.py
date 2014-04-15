@@ -34,7 +34,7 @@ class KrDemoCrawler(CrawlSpider):
 
         item['sitename'] = '36Kr'
 
-        item['where'] = sel.xpath('//head/meta[@name="twitter:url"]/@content').extract()
+        item['where'] = response.url
 
         item['content'] = sel.xpath('//section[@class="article"]').extract()
 
