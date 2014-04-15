@@ -1,5 +1,5 @@
 __author__ = 'M.X'
-
+# -*- coding: utf-8 -*-
 from scrapy.selector import Selector
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
@@ -33,6 +33,6 @@ class StackDemoSpider(CrawlSpider):
         #seq1 = question explaination <----> seq2 = best voted answer
         seq1 = sel.xpath('//div[@class="question"]/table//div[@class="post-text"]').extract()
         seq2 = sel.xpath('//div[@id="answers"]//div[@data-answerid][1]//div[@class="post-text"]').extract()
-        item['content'] = seq1+seq2
+        item['content'] = '<p>问题:</p>'+seq1+'</br><p>最佳答案:</p>'+seq2
 
         return item

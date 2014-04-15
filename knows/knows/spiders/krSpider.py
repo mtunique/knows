@@ -32,7 +32,7 @@ class KrDemoCrawler(CrawlSpider):
         #q = []
         item['date'] = p
 
-        item['formsite'] = '36Kr'
+        item['fromsite'] = '36Kr'
 
         item['link'] = response.url
 

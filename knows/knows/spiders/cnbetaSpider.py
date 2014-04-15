@@ -27,7 +27,7 @@ class GroupTestSpider(CrawlSpider):
 
         item['content'] = sel.xpath('//div[@class="content"]')[0].extract()
 
-        item['formsite'] = 'cnBeta'
+        item['fromsite'] = 'cnBeta'
 
         item['link'] = response.url
 

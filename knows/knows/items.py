@@ -9,5 +9,4 @@ class ArticleItem(Item):
     #link to the article
     link = Field()
     #when it's an article,it contains the content&pics
-    #when it's a question&answer, it contains the best one
     content = Field()
