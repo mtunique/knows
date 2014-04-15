@@ -24,9 +24,9 @@ class StackDemoSpider(CrawlSpider):
 
         item['title'] = sel.xpath('//head/meta[@name="og:title"]/@content').extract()
 
-        item['sitename'] = 'Stack OverFLow'
+        item['fromsite'] = 'Stack OverFLow'
 
-        item['where'] = response.url
+        item['link'] = response.url
 
         item['date'] = sel.xpath('//div[@class="question"]/table//div[@class="user-action-time"]//span/@title').extract()[0]
 

@@ -29,9 +29,9 @@ class cnBetaSpider(BaseSpider):
 
         item['content'] = sel.xpath('//div[@class="content"]').extract()
 
-        item['sitename'] = 'cnBeta'
+        item['fromsite'] = 'cnBeta'
 
-        item['where'] = response.url
+        item['link'] = response.url
 
         item['date'] = sel.xpath('//span[@class="date"]/text()').extract()
 

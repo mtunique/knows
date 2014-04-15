@@ -32,9 +32,9 @@ class KrDemoCrawler(CrawlSpider):
         #q = []
         item['date'] = p
 
-        item['sitename'] = '36Kr'
+        item['fromsite'] = '36Kr'
 
-        item['where'] = response.url
+        item['link'] = response.url
 
         item['content'] = sel.xpath('//section[@class="article"]').extract()
 

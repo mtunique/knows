@@ -7,7 +7,7 @@ class ArticleItem(Item):
     date = Field()
     title = Field()
     #link to the article
-    where = Field()
+    link = Field()
     #short summery of the article
     desc = Field()
     #when it's an article,it contains the content&pics
