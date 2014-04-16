@@ -9,7 +9,7 @@ from knows.items import ArticleItem
 class KrDemoCrawler(CrawlSpider):
     name = "kr"
     allowed_domains = [
-        "36kr"
+        "36kr.com"
     ]
 
     start_urls = [

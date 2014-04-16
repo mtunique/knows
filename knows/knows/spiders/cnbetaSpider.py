@@ -9,11 +9,7 @@ from scrapy.spider import BaseSpider
 
 
 class cnBetaSpider(BaseSpider):
-<<<<<<< HEAD
     name = "cnbeta"
-=======
-    name = "cnbeta1"
->>>>>>> assuming-master
     allowed_domains = ["cnbeta.com"]
     start_urls = [
         "http://www.cnbeta.com/"
