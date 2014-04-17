@@ -2,7 +2,7 @@ __author__ = 'mt'
 # -*- coding: utf-8 -*-
 import pymongo
 import json
-from knows.knows.mongodb import db
+from dbs.mongodb import db
 
 
 def getConnetAsJson(data):
