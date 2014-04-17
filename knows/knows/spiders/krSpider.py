@@ -25,7 +25,7 @@ class KrDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
-        item['title'] = sel.xpath('//header[@class="single-post-header__meta"]//h1/text()').extract()
+        item['title'] = sel.xpath('//header[@class="single-post-header__meta"]//h1/text()')[0].extract()
 
         lst = sel.xpath('//header[@class="single-post-header__meta"]/div/text()').extract()[0].split(' ')
         p = lst[2] + ',' + lst[3]
@@ -36,6 +36,6 @@ class KrDemoCrawler(CrawlSpider):
 
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//section[@class="article"]').extract()
+        item['content'] = sel.xpath('//section[@class="article"]')[0].extract()
 
         return item

@@ -1,6 +1,8 @@
 import mongodb
 import datetime
 import hashlib
+from knows.items import ArticleItem
+import time
 
 class SpiderPipeline(object):
     def process_item(self, item, spider):
@@ -11,7 +13,7 @@ class ArticleInsertPipline(object):
     def __init__(self):
         self.db = mongodb.db
 
-    def process_item(self, item, spider):
+    def process_item(self, item, spider=None):
         tmpItem = dict(item)
 
         # If item['date'] is None, set it.
@@ -20,10 +22,14 @@ class ArticleInsertPipline(object):
         #     hash link
         tmpItem.setdefault('date', datetime.datetime.now().strftime('%Y-%m-%d %H:%M'))
         tmpItem.setdefault('_id', hashlib.md5(tmpItem['link']).hexdigest().upper())
+        tmpItem.setdefault('time', str(int(time.time())))
 
         #insert article information & content into db
-        self.db.conntent.insert({'_id': tmpItem['_id'], 'content': tmpItem['content']})
+        self.db.content.insert({'_id': tmpItem['_id'], 'content': tmpItem['content']})
         tmpItem.pop('content')
         self.db.article.insert(tmpItem)
         return item
 
+if __name__ == '__main__':
+    a = ArticleInsertPipline()
+    a.process_item(item=ArticleItem({'link':'dsadsad','content':'dasdasdassadsa'}))

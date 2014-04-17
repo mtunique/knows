@@ -22,17 +22,17 @@ class StackDemoSpider(CrawlSpider):
 
         item = ArticleItem()
 
-        item['title'] = sel.xpath('//head/meta[@name="og:title"]/@content').extract()
+        item['title'] = sel.xpath('//head/meta[@name="og:title"]/@content')[0].extract()
 
         item['fromsite'] = 'Stack OverFLow'
 
         item['link'] = response.url
 
-        item['date'] = sel.xpath('//div[@class="question"]/table//div[@class="user-action-time"]//span/@title').extract()[0]
+        item['date'] = sel.xpath('//div[@class="question"]/table//div[@class="user-action-time"]//span/@title')[0].extract()
 
         #seq1 = question explaination <----> seq2 = best voted answer
-        seq1 = sel.xpath('//div[@class="question"]/table//div[@class="post-text"]').extract()
-        seq2 = sel.xpath('//div[@id="answers"]//div[@data-answerid][1]//div[@class="post-text"]').extract()
-        item['content'] = '<p>问题:</p>'+seq1+'</br><p>最佳答案:</p>'+seq2
+        seq1 = sel.xpath('//div[@class="question"]/table//div[@class="post-text"]')[0].extract()
+        seq2 = sel.xpath('//div[@id="answers"]//div[@data-answerid][1]//div[@class="post-text"]')[0].extract()
+        item['content'] = '<p>qusetion:</p>'+seq1.decode('utf-8')+'</br><p>best answer:</p>'+seq2.decode('utf-8')
 
         return item

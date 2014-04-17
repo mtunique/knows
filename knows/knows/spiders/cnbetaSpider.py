@@ -27,14 +27,14 @@ class cnBetaSpider(BaseSpider):
 
         item = ArticleItem()
 
-        item['content'] = sel.xpath('//div[@class="content"]').extract()
+        item['content'] = sel.xpath('//div[@class="content"]')[0].extract()
 
         item['fromsite'] = 'cnBeta'
 
         item['link'] = response.url
 
-        item['date'] = sel.xpath('//span[@class="date"]/text()').extract()
+        item['date'] = sel.xpath('//span[@class="date"]/text()')[0].extract()
 
-        item['title'] = sel.xpath('//div[@class="body"]/header/h2/text()').extract()
+        item['title'] = sel.xpath('//div[@class="body"]/header/h2/text()')[0].extract()
 
         return item
