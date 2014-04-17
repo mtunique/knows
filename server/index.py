@@ -24,5 +24,3 @@ else:
 
     server = wsgiref.simple_server.make_server('', 8080, app)
     server.serve_forever()
-    # import sae
-    # application = sae.create_wsgi_app(app)
