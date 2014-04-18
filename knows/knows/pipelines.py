@@ -22,7 +22,8 @@ class ArticleInsertPipline(object):
         #     hash link
         tmpItem.setdefault('date', datetime.datetime.now().strftime('%Y-%m-%d %H:%M'))
         tmpItem.setdefault('_id', hashlib.md5(tmpItem['link']).hexdigest().upper())
-        tmpItem.setdefault('time', str(int(time.time())))
+        tmpItem.setdefault('time', str(int(time.time()*10000)))
+        time.sleep(0.001)
 
         #insert article information & content into db
         self.db.content.insert({'_id': tmpItem['_id'], 'content': tmpItem['content']})

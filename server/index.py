@@ -15,12 +15,11 @@ settings = {
         }
 
 if __name__ == '__main__':
-    app = tornado.wsgi.WSGIApplication([(r"/list/*", MainHandler),(r"/article*", MainHandler), ], **settings)
-
-    server = wsgiref.simple_server.make_server('', 8080, app)
-    server.serve_forever()
-else:
-    app = tornado.wsgi.WSGIApplication([(r"/", MainHandler), ], **settings)
+    app = tornado.wsgi.WSGIApplication([
+        (r"/list/*", ListHandler),
+        (r"/article*", ArticleHandler),
+        ],
+        **settings)
 
     server = wsgiref.simple_server.make_server('', 8080, app)
     server.serve_forever()
