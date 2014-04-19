@@ -13,7 +13,7 @@ def getConnetAsJson(data):
 
 
 def getAricleListJson(user, time):
-    return json.dumps(list(db.article.find({"time": {"$lt": time}}).limit(15)))
+    return json.dumps(list(db.article.find({"time": {"$lt": time}}).limit(15).sort({"time": -1})))
 
 
 if __name__ == '__main__':
