@@ -6,7 +6,10 @@ from dbs.mongodb import db
 
 
 def getConnetAsJson(data):
-    return db.content.find_one({'_id':data})['content']
+    try:
+        return db.content.find_one({'_id': data})['content']
+    except:
+        return '无法获取文章'
 
 
 def getAricleListJson(user, time):
