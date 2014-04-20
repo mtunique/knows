@@ -25,6 +25,22 @@ class ArticleInsertPipline(object):
         tmpItem.setdefault('time', str(int(time.time()*10000)))
         time.sleep(0.001)
 
+        tmpItem['content'] = '''
+                            <!DOCTYPE html>
+                            <html>
+                            <head>
+                            <style>
+                            img{
+                                max-width:300px;
+                            }
+                            </style>
+                            </head>
+                            <body>
+                            '''+tmpItem['content']+'''
+                            </body>
+                            </ html>
+                            '''
+
         #insert article information & content into db
         self.db.content.insert({'_id': tmpItem['_id'], 'content': tmpItem['content']})
         tmpItem.pop('content')
