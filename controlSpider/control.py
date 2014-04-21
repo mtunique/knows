@@ -2,24 +2,22 @@ __author__ = 'mt'
 # -*- coding: utf-8 -*-
 import threading
 import time
+import subprocess
+from settings import SPIDER_INTERVAL as sp
 
 
-def spider1():
-    time.sleep(10)
-    print '1'
-    print time.time()
+def exec_spider(name, interval):
+    try:
+        script = 'cd ~/work/knows/knows/knows/\nscrapy crawl %s' % name
+        output = subprocess.check_output(script, shell=True)
+        print output
+    except subprocess.CalledProcessError as err:
+        print err
+    time.sleep(interval)
 
 
-def spider2():
-    time.sleep(20)
-    print '2'
-    print time.time()
-
-
-t1 = threading.Thread(target=spider1)
-t2 = threading.Thread(target=spider2)
-
-print time.time()
-t1.start()
-t2.start()
-
+spiders = {}
+for i in sp:
+    spider = threading.Thread(target=exec_spider, args=(i, sp[i]))
+    spiders.setdefault(i, spider)
+    spider.start()
