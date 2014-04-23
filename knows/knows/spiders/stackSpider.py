@@ -4,6 +4,7 @@ from scrapy.selector import Selector
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from knows.items import ArticleItem
+from baseFunctions import process_links
 
 
 class StackDemoSpider(CrawlSpider):
@@ -14,7 +15,7 @@ class StackDemoSpider(CrawlSpider):
     ]
 
     rules = [
-        Rule(SgmlLinkExtractor(allow='questions/[0-9]{1,}/'), callback="parse_stack_urls")
+        Rule(SgmlLinkExtractor(allow='questions/[0-9]{1,}/'), callback="parse_stack_urls", process_links=process_links)
     ]
 
     def parse_stack_urls(self, response):
