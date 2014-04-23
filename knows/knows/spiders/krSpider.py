@@ -4,6 +4,7 @@ from scrapy.selector import Selector
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from knows.items import ArticleItem
+from baseFunctions import process_links
 
 
 class KrDemoCrawler(CrawlSpider):
@@ -17,7 +18,7 @@ class KrDemoCrawler(CrawlSpider):
     ]
 
     rules = [
-        Rule(SgmlLinkExtractor(allow='/p/[0-9]{6}',), callback='parse_article')
+        Rule(SgmlLinkExtractor(allow='/p/[0-9]{6}',), callback='parse_article', process_links=process_links)
     ]
 
     def parse_article(self, response):

@@ -6,6 +6,7 @@ from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.selector import Selector
 from knows.items import ArticleItem
 from scrapy.spider import BaseSpider
+from baseFunctions import judge_link
 
 
 class cnBetaSpider(BaseSpider):
@@ -20,6 +21,8 @@ class cnBetaSpider(BaseSpider):
 
         for url in slp.xpath('//div[@class="items_area"]/dl/dt/a/@href').extract():
             new_url = "http://www.cnbeta.com" + url
+            if judge_link(new_url):
+                continue
             yield Request(new_url, callback=self.parse_article)
 
     def parse_article(self, response):

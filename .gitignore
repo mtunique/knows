@@ -55,3 +55,6 @@ docs/_build/
 # Python
 *.pyc
 .idea/
+
+#mongdb
+mongodb.py
