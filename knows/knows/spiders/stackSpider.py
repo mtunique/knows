@@ -34,6 +34,6 @@ class StackDemoSpider(CrawlSpider):
         #seq1 = question explaination <----> seq2 = best voted answer
         seq1 = sel.xpath('//div[@class="question"]/table//div[@class="post-text"]')[0].extract()
         seq2 = sel.xpath('//div[@id="answers"]//div[@data-answerid][1]//div[@class="post-text"]')[0].extract()
-        item['content'] = '<p>qusetion:</p>'+seq1.decode('utf-8')+'</br><p>best answer:</p>'+seq2.decode('utf-8')
+        item['content'] = '<p>qusetion:</p>'+seq1.encode('utf-8').decode('utf-8')+'</br><p>best answer:</p>'+seq2.encode('utf-8').decode('utf-8')
 
         return item
