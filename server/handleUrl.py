@@ -10,9 +10,9 @@ class ListHandler(tornado.web.RequestHandler):
     def get(self):
         if self.request.arguments['time'][0] == '0':
             self.request.arguments['time'][0] = str(int(time.time()*10000))
-        self.write(getAricleListJson(self.request.arguments['user'][0], self.request.arguments['time'][0]))
+        self.write(get_article_list_as_json(self.request.arguments['user'][0], self.request.arguments['time'][0]))
 
 
 class ArticleHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write(getConnetAsJson(self.request.arguments['hash'][0]))
+        self.write(get_content_as_json(self.request.arguments['hash'][0]))

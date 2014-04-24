@@ -1,4 +1,4 @@
-import mongodb
+import DBs
 import datetime
 import hashlib
 from knows.items import ArticleItem
@@ -11,7 +11,7 @@ class SpiderPipeline(object):
 
 class ArticleInsertPipline(object):
     def __init__(self):
-        self.db = mongodb.db
+        self.mongodb = DBs.db
 
     def process_item(self, item, spider=None):
         tmpItem = dict(item)
@@ -26,12 +26,14 @@ class ArticleInsertPipline(object):
         time.sleep(0.001)
 
         tmpItem['content'] = '<!DOCTYPE html>\n<html>\n<head>\n<style>\nimg{\nmax-width:300px;\n}\n</style>\n</he' \
-                             'ad>\n<body>\n'+tmpItem['content']+'</body>\n</ html>'
+                             'ad>\n<body>\n'+tmpItem['content']+'</body>\n</html>'
 
         #insert article information & content into db
-        self.db.content.insert({'_id': tmpItem['_id'], 'content': tmpItem['content']})
+        self.mongodb.content.insert({'_id': tmpItem['_id'], 'content': tmpItem['content']})
+
+
         tmpItem.pop('content')
-        self.db.article.insert(tmpItem)
+        self.mongodb.article.insert(tmpItem)
         return item
 
 if __name__ == '__main__':
