@@ -1,4 +1,4 @@
-import DBs
+from dbs import mongodb
 import datetime
 import hashlib
 from knows.items import ArticleItem
@@ -11,7 +11,7 @@ class SpiderPipeline(object):
 
 class ArticleInsertPipline(object):
     def __init__(self):
-        self.mongodb = DBs.db
+        self.mongodb = mongodb.db
 
     def process_item(self, item, spider=None):
         tmpItem = dict(item)
