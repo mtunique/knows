@@ -57,4 +57,4 @@ docs/_build/
 .idea/
 
 #mongdb
-dbs/
+*dbs/

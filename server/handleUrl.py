@@ -3,7 +3,7 @@ __author__ = 'mt'
 import tornado.web
 from getData import *
 import time
-from tornado import template
+from handleUser import *
 
 
 class ListHandler(tornado.web.RequestHandler):
@@ -16,3 +16,16 @@ class ListHandler(tornado.web.RequestHandler):
 class ArticleHandler(tornado.web.RequestHandler):
     def get(self):
         self.write(get_content_as_json(self.request.arguments['hash'][0]))
+
+
+class RegisterHandler(tornado.web.RequestHandler):
+    def post(self):
+        try:
+            if self.request.arguments['what'] == 'register':
+                add_user(self.request.arguments['main-uid'])
+                self.write("{'ret':0}")
+            if self.request.arguments['what'] == 'merge':
+                merge_user(self.request.arguments['main-uid'], self.request.arguments['merge-uid'],
+                           self.request.arguments['type'])
+        finally:
+            self.write('参数错误')

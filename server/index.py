@@ -18,6 +18,7 @@ if __name__ == '__main__':
     app = tornado.wsgi.WSGIApplication([
         (r"/list/*", ListHandler),
         (r"/article*", ArticleHandler),
+        (r"/register*", RegisterHandler),
         ],
         **settings)
 
