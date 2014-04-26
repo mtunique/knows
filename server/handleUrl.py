@@ -21,11 +21,22 @@ class ArticleHandler(tornado.web.RequestHandler):
 class RegisterHandler(tornado.web.RequestHandler):
     def post(self):
         try:
-            if self.request.arguments['what'] == 'register':
-                add_user(self.request.arguments['main-uid'])
+            if self.request.arguments['what'][0] == 'register':
+                add_user(self.request.arguments['main-uid'][0])
                 self.write("{'ret':0}")
-            if self.request.arguments['what'] == 'merge':
-                merge_user(self.request.arguments['main-uid'], self.request.arguments['merge-uid'],
-                           self.request.arguments['type'])
-        finally:
-            self.write('参数错误')
+            if self.request.arguments['what'][0] == 'merge':
+                merge_user(self.request.arguments['main-uid'][0], self.request.arguments['merge-uid'][0],
+                           self.request.arguments['type'][0])
+        except Exception as err:
+            self.write('参数错误' + err.message)
+
+    def get(self):
+        try:
+            if self.request.arguments['what'][0] == 'register':
+                add_user(self.request.arguments['main-uid'][0])
+                self.write("{'ret':0}")
+            if self.request.arguments['what'][0] == 'merge':
+                merge_user(self.request.arguments['main-uid'][0], self.request.arguments['merge-uid'][0],
+                           self.request.arguments['type'][0])
+        except Exception as err:
+            self.write('参数错误' + err.message)

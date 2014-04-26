@@ -8,4 +8,4 @@ def add_user(uid):
 
 
 def merge_user(uid, merge_id, type):
-    pass
+    mongodb.db.user.update({'_id':uid}, {'$set':{merge_id:type}}, upsert=True)
