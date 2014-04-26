@@ -11,7 +11,7 @@ class SpiderPipeline(object):
         return item
 
 
-class ArticleInsertPipline(object):
+class ArticleInsertPipeline(object):
     def process_item(self, item, spider=None):
         tmp_item = dict(item)
 
@@ -38,5 +38,5 @@ class ArticleInsertPipline(object):
         return item
 
 if __name__ == '__main__':
-    a = ArticleInsertPipline()
+    a = ArticleInsertPipeline()
     a.process_item(item=ArticleItem({'link':'dsadsad','content':'dasdasdassadsa'}))
