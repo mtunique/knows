@@ -24,8 +24,8 @@ class ArticleInsertPipeline(object):
         tmp_item.setdefault('time', str(int(time.time()*10000)))
         time.sleep(0.001)
 
-        tmp_item['content'] = '<!DOCTYPE html>\n<html>\n<head>\n<script src="file:///android_asset/my.js" />\n' \
-                              '</head>\n<body>\n'+tmp_item['content']+'</body>\n</html>'
+        tmp_item['content'] = '<!DOCTYPE html>\n<html>\n<head>\n<script src="file:///android_asset/my.js" /></script' \
+                              '>\n</head>\n<body>\n'+tmp_item['content']+'</body>\n</html>'
 
         #insert article information & content into db
         mongodb.db.content.update({'_id': tmp_item['_id']},
