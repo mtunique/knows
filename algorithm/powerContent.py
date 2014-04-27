@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 
 
 def to_string(content, strip=True):
-    html = BeautifulSoup(content).html
+    html = BeautifulSoup(content).html.body
     return html.get_text('\n', strip=strip)
 
 
