@@ -35,7 +35,7 @@ class ArticleInsertPipeline(object):
 
         tmp_item.pop('content')
         mongodb.db.article.insert(tmp_item)
-        return item
+        #return item
 
 if __name__ == '__main__':
     a = ArticleInsertPipeline()
