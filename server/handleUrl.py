@@ -29,6 +29,7 @@ class RegisterHandler(tornado.web.RequestHandler):
                            self.request.arguments['type'][0])
         except Exception as err:
             self.write('参数错误' + err.message)
+        print self.request.argumentss
 
     def get(self):
         try:
