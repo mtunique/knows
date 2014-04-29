@@ -7,6 +7,5 @@ __author__ = 'mt'
 #     {'spider_name': 1, }
 SPIDER_INTERVAL = {
     'cnbeta': 3600,
-    'stack': 3600,
     'kr': 3600,
 }
