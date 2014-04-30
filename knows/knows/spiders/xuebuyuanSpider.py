@@ -9,17 +9,17 @@ from baseFunctions import process_links
 
 
 class CsdnDemoCrawler(CrawlSpider):
-    name = "oschina"
+    name = "xuebuyuan"
     allowed_domains = [
-        "oschina.net"
+        "xuebuyuan.com"
     ]
 
     start_urls = [
-        'http://www.oschina.net/blog',
+        'http://www.xuebuyuan.com',
     ]
 
     rules = [
-        Rule(SgmlLinkExtractor(allow='/.+/blog/[0-9]+$',), callback='parse_article', process_links=process_links)
+        Rule(SgmlLinkExtractor(allow='^/[0-9]+\.html$',), callback='parse_article', process_links=process_links)
     ]
 
     def parse_article(self, response):
@@ -27,10 +27,10 @@ class CsdnDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
-        item['fromsite'] = 'oschina'
+        item['fromsite'] = 'xuebuyuan'
 
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//div[@class="BlogContent"]')[0].extract()
+        item['content'] = sel.xpath('//div[@id="article_content"]')[0].extract()
 
         return item

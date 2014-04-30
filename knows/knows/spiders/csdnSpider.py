@@ -1,6 +1,5 @@
 __author__ = 'mt'
 # -*- coding: utf-8 -*-
-__author__ = 'M.X'
 
 from scrapy.selector import Selector
 from scrapy.contrib.spiders import CrawlSpider, Rule
