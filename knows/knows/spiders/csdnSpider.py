@@ -41,6 +41,7 @@ class CsdnDemoCrawler(CrawlSpider):
 
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//div[@id="article_content"]')[0].extract()
+        item['content'] = sel.xpath('//span[@class="link_title"]')[0].extract() \
+                          +sel.xpath('//div[@id="article_content"]')[0].extract()
 
         return item

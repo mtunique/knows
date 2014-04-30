@@ -8,7 +8,7 @@ from knows.items import ArticleItem
 from baseFunctions import process_links
 
 
-class CsdnDemoCrawler(CrawlSpider):
+class OschinaDemoCrawler(CrawlSpider):
     name = "oschina"
     allowed_domains = [
         "oschina.net"
@@ -31,6 +31,7 @@ class CsdnDemoCrawler(CrawlSpider):
 
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//div[@class="BlogContent"]')[0].extract()
+        item['content'] =sel.xpath('//div[@class="BlogTitle"]/h1')[0].extract()\
+                         + sel.xpath('//div[@class="BlogContent"]')[0].extract()
 
         return item
