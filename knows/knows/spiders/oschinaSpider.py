@@ -16,10 +16,12 @@ class OschinaDemoCrawler(CrawlSpider):
 
     start_urls = [
         'http://www.oschina.net/blog',
+        'http://www.oschina.net/news'
     ]
 
     rules = [
-        Rule(SgmlLinkExtractor(allow='/.+/blog/[0-9]+$',), callback='parse_article', process_links=process_links)
+        Rule(SgmlLinkExtractor(allow='/.+/blog/[0-9]+$',), callback='parse_article', process_links=process_links),
+        Rule(SgmlLinkExtractor(allow='/news/[0-9]+/.+$',), callback='parse_article2', process_links=process_links)
     ]
 
     def parse_article(self, response):
@@ -27,11 +29,25 @@ class OschinaDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
-        item['fromsite'] = 'oschina'
+        item['fromsite'] = 'oschina_blog'
 
         item['link'] = response.url
 
         item['content'] =sel.xpath('//div[@class="BlogTitle"]/h1')[0].extract()\
                          + sel.xpath('//div[@class="BlogContent"]')[0].extract()
+
+        return item
+
+    def parse_article2(self, response):
+        sel = Selector(response)
+
+        item = ArticleItem()
+
+        item['fromsite'] = 'oschina_news'
+
+        item['link'] = response.url
+
+        item['content'] =sel.xpath('//h1[@class="OSCTitle"]/text()')[0].extract()\
+                         +sel.xpath('//div[@class="Body NewsContent TextContent"]')[0].extract()
 
         return item
