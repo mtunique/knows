@@ -19,7 +19,7 @@ class XuebuyuanDemoCrawler(CrawlSpider):
     ]
 
     rules = [
-        Rule(SgmlLinkExtractor(allow='^/[0-9]+\.html$',), callback='parse_article', process_links=process_links)
+        Rule(SgmlLinkExtractor(allow='/[0-9]+\.html$',), callback='parse_article', process_links=process_links)
     ]
 
     def parse_article(self, response):

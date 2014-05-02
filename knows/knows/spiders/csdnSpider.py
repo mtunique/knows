@@ -15,21 +15,12 @@ class CsdnDemoCrawler(CrawlSpider):
     ]
 
     start_urls = [
-        'http://blog.csdn.net/',
-        'http://blog.csdn.net/mobile/index.html',
-        'http://blog.csdn.net/web/index.html',
-        'http://blog.csdn.net/enterprise/index.html',
-        'http://blog.csdn.net/code/index.html',
-        'http://blog.csdn.net/www/index.html',
-        'http://blog.csdn.net/database/index.html',
-        'http://blog.csdn.net/system/index.html',
-        'http://blog.csdn.net/cloud/index.html',
-        'http://blog.csdn.net/software/index.html',
-        'http://blog.csdn.net/other/index.html',
+        'http://www.csdn.net/rollingnews.html',
     ]
 
     rules = [
-        Rule(SgmlLinkExtractor(allow='/.+/article/details/[0-9]{8}',), callback='parse_article', process_links=process_links)
+        Rule(SgmlLinkExtractor(allow='/article/[^t]+/.*$',), callback='parse_article', process_links=process_links),
+        Rule(SgmlLinkExtractor(allow='/news/.*$',), callback='parse_article_news', process_links=process_links)
     ]
 
     def parse_article(self, response):
@@ -41,7 +32,22 @@ class CsdnDemoCrawler(CrawlSpider):
 
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//span[@class="link_title"]')[0].extract() \
-                          +sel.xpath('//div[@id="article_content"]')[0].extract()
+        item['content'] = sel.xpath('//h1[@class="title"]')[0].extract() \
+                          +sel.xpath('//div[@class="con news_content"]')[0].extract()
+
+        return item
+
+    def parse_article_news(self, response):
+        sel = Selector(response)
+
+        item = ArticleItem()
+
+        item['fromsite'] = self.name
+
+        item['link'] = response.url
+
+        item['content'] = sel.xpath('//h1')[0].extract()+\
+                          sel.xpath('//div[@class="content document_file_content"]')[0].extract()
+
 
         return item

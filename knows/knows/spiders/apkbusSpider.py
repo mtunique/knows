@@ -27,7 +27,7 @@ class ApkbusDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
-        item['fromsite'] = 'apkbus'
+        item['fromsite'] = self.name
 
         item['link'] = response.url
 

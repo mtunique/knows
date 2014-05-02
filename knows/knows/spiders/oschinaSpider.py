@@ -20,11 +20,11 @@ class OschinaDemoCrawler(CrawlSpider):
     ]
 
     rules = [
-        Rule(SgmlLinkExtractor(allow='/.+/blog/[0-9]+$',), callback='parse_article', process_links=process_links),
-        Rule(SgmlLinkExtractor(allow='/news/[0-9]+/.+$',), callback='parse_article2', process_links=process_links)
+        Rule(SgmlLinkExtractor(allow='/.+/blog/[0-9]+$',), callback='parse_article_blog', process_links=process_links),
+        Rule(SgmlLinkExtractor(allow='/news/[0-9]+/.+$',), callback='parse_article_news', process_links=process_links)
     ]
 
-    def parse_article(self, response):
+    def parse_article_blog(self, response):
         sel = Selector(response)
 
         item = ArticleItem()
@@ -38,7 +38,7 @@ class OschinaDemoCrawler(CrawlSpider):
 
         return item
 
-    def parse_article2(self, response):
+    def parse_article_news(self, response):
         sel = Selector(response)
 
         item = ArticleItem()

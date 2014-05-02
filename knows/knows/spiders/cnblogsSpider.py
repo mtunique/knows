@@ -19,7 +19,7 @@ class CnblogsDemoCrawler(CrawlSpider):
     ]
 
     rules = [
-        Rule(SgmlLinkExtractor(allow='^/.+/p/[0-9]+\.html$',), callback='parse_article', process_links=process_links)
+        Rule(SgmlLinkExtractor(allow='/.+/p/[0-9]+\.html$',), callback='parse_article', process_links=process_links)
     ]
 
     def parse_article(self, response):
@@ -27,11 +27,17 @@ class CnblogsDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
-        item['fromsite'] = 'cnblogs'
+        item['fromsite'] = self.name
 
         item['link'] = response.url
-
-        item['content'] = sel.xpath('//a[@id="cb_post_title_url"]/text()')[0].extract()+ \
-                          sel.xpath('//div[@id="article_content"]')[0].extract()
+        try:
+            s1 = sel.xpath('//a[@id="cb_post_title_url"]/text()')[0].extract()
+            try:
+                item['content'] = s1+sel.xpath('//div[@id="article_content"]')[0].extract()
+            except Exception:
+                item['content'] = s1+sel.xpath('//div[@id="cnblogs_post_body"]')[0].extract()
+        except Exception:
+            item['content'] = sel.xpath('//h1[@class="postTitle"]')[0].extract()+ \
+                  sel.xpath('//div[@class="postBody"]')[0].extract()
 
         return item
