@@ -5,7 +5,7 @@ from scrapy.http import Request
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.selector import Selector
-from many_crawler_set.items import ArticleItem
+from knows.items import ArticleItem
 from scrapy.spider import BaseSpider
 from baseFunctions import judge_link
 import re
