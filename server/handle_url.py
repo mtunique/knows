@@ -1,9 +1,9 @@
 __author__ = 'mt'
 # -*- coding: utf-8 -*-
 import tornado.web
-from getData import *
+from get_data import *
 import time
-from handleUser import *
+from handle_user import *
 
 
 class ListHandler(tornado.web.RequestHandler):

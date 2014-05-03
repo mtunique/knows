@@ -6,8 +6,7 @@ from bs4 import BeautifulSoup
 
 
 def to_string(content, strip=True):
-    html = BeautifulSoup(content).html.body
-    return html.get_text('\n', strip=strip)
+    return BeautifulSoup(content).html.body.get_text('\n', strip=strip)
 
 
 if __name__ == '__main__':
@@ -17,5 +16,6 @@ if __name__ == '__main__':
 
         string = to_string(content_html)
 
-        mongodb.db.s_content.update({'_id': content_hash},{'$set': {'s': string}}, upsert=True)
+        time = mongodb.db.article.find_one({'_id': content_hash})['time']
+        mongodb.db.s_content.update({'_id': content_hash}, {'$set': {'s': string, 'time': time}}, upsert=True)
         redisdb.db.lpush('s_content', content_hash)

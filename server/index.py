@@ -8,7 +8,7 @@ import tornado.httpserver
 import wsgiref.simple_server
 import os
 
-from handleUrl import *
+from handle_url import *
 
 settings = {
         "static_path": os.path.join(os.path.dirname(__file__), "static"),
