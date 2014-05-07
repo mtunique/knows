@@ -24,10 +24,12 @@ class Vector(object):
         return ans
 
 
-def main():
-    vectors = list(mongodb.db.vector.find())
-
-
+def main(article):
+    vectors = list(mongodb.db.vector.find({}))
+    ans = {}
+    for vector in vectors:
+        ans.setdefault(vector['_id'], cos(list(vector['v']), article))
+    return [ans[str(i)] for i in range(len(ans))]
 
 if __name__ == '__main__':
     main()
