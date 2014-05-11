@@ -2,6 +2,7 @@ __author__ = 'mt'
 # -*- coding: utf-8 -*-
 import math
 from counts import *
+from online_ldavb import parse_doc_list
 
 
 def _cos(x, y):
