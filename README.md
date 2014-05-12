@@ -1,15 +1,14 @@
 knows
 =====
 Android app knows server by mtunique.
-=====
-###DB
+#DB
 ##mongodb
-> article
-content
-s_content
-vector
-v_content
++ article
++ content
++ s_content
++ vector
++ v_content
 
 ##redis
->content
-s_content
++ content
++ s_content
