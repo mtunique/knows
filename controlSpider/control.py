@@ -9,7 +9,7 @@ from settings import SPIDER_INTERVAL as sp
 def exec_spider(name, interval):
     while True:
         try:
-            script = 'cd ~/work/knows/knows/knows/\nscrapy crawl %s' % name
+            script = 'cd ../knows/knows/\nscrapy crawl %s' % name
             output = subprocess.check_output(script, shell=True)
             print output
         except subprocess.CalledProcessError as err:

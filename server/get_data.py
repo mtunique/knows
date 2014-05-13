@@ -5,16 +5,16 @@ import json
 from dbs.mongodb import db
 
 
-def getConnetAsJson(data):
+def get_content_as_json(data):
     try:
         return db.content.find_one({'_id': data})['content']
-    except:
-        return '无法获取文章'
+    except Exception as err:
+        return '无法获取文章'+str(err)
 
 
-def getAricleListJson(user, time):
+def get_article_list_as_json(user, time):
     return json.dumps(list(db.article.find({"time": {"$lt": time}}).sort("time", DESCENDING).limit(15)))
 
 
 if __name__ == '__main__':
-    print getAricleListJson('dsada','1111111111110')
+    print get_article_list_as_json('dsada', '1111111111110')

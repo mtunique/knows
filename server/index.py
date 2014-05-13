@@ -8,7 +8,7 @@ import tornado.httpserver
 import wsgiref.simple_server
 import os
 
-from handleUrl import *
+from handle_url import *
 
 settings = {
         "static_path": os.path.join(os.path.dirname(__file__), "static"),
@@ -18,6 +18,7 @@ if __name__ == '__main__':
     app = tornado.wsgi.WSGIApplication([
         (r"/list/*", ListHandler),
         (r"/article*", ArticleHandler),
+        (r"/register*", RegisterHandler),
         ],
         **settings)
 
