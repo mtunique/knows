@@ -1,10 +1,13 @@
 __author__ = 'M.X'
+# -*- coding: UTF-8 -*-
 
+from scrapy.http import Request
 from scrapy.selector import Selector
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from knows.items import ArticleItem
 from baseFunctions import process_links
+from baseFunctions import judge_link
 
 
 class KrDemoCrawler(CrawlSpider):
@@ -17,9 +20,15 @@ class KrDemoCrawler(CrawlSpider):
         "http://www.36kr.com/topic/technology"
     ]
 
-    rules = [
-        Rule(SgmlLinkExtractor(allow='/p/[0-9]{6}',), callback='parse_article', process_links=process_links)
-    ]
+    def parse_start_url(self, response):
+        slp = Selector(response)
+
+        for url in slp.xpath('//article[@class="posts post-1 cf"]//div[@class="meta"]/a/@href').extract():
+            new_url = 'http://www.36kr.com/' + url
+
+            if judge_link(new_url):
+                continue
+            yield Request(new_url, callback="parse_article")
 
     def parse_article(self, response):
         sel = Selector(response)
@@ -28,12 +37,10 @@ class KrDemoCrawler(CrawlSpider):
 
         item['title'] = sel.xpath('//header[@class="single-post-header__meta"]//h1/text()')[0].extract()
 
-        lst = sel.xpath('//header[@class="single-post-header__meta"]/div/text()').extract()[0].split(' ')
-        p = lst[2] + ',' + lst[3]
-        #q = []
-        item['date'] = p
+        item['date'] = sel.xpath('//meta[@name="weibo: article:create_at"]/@content')[0].extract().split(' ')[0]
+        #date format:2014-05-04
 
-        item['fromsite'] = '36Kr'
+        item['fromsite'] = self.name
 
         item['link'] = response.url
 

@@ -6,7 +6,6 @@ from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.selector import Selector
 from knows.items import ArticleItem
-from scrapy.spider import BaseSpider
 from baseFunctions import judge_link
 import re
 
@@ -16,11 +15,7 @@ class uisdcSpider(CrawlSpider):
     allowed_domains = ['uisdc.com']
 
     start_urls = [
-        'http://www.uisdc.com/archives/page/1',
-        'http://www.uisdc.com/archives/page/2',
-        'http://www.uisdc.com/archives/page/3',
-        'http://www.uisdc.com/archives/page/4',
-        'http://www.uisdc.com/archives/page/5',
+        'http://www.uisdc.com/archives/page/1'
     ]
 
     def parse_start_url(self, response):
@@ -37,8 +32,19 @@ class uisdcSpider(CrawlSpider):
 
         item = ArticleItem()
 
+        item['title'] = sel.xpath('//h1[@class="post-title entry-title"]/text()')[0].extract()
+
+        raw_date = sel.xpath('//abbr[@class="published"]/text()')[0].extract()
+        item['date'] = re.sub('/', '-', raw_date)
+        #date format:2014-5-6
+
+        item['fromsite'] = self.name
+
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//div[@class="entry-content"]')[0].extract()
+        raw_content = sel.xpath('//div[@class="entry-content"]/*[position()<(last()-3)]').extract()
+        for line in raw_content:
+            real_content = real_content + line
+        item['content'] = real_content
 
         return item

@@ -35,8 +35,20 @@ class zuimeiSpider(CrawlSpider):
 
         item = ArticleItem()
 
+        app_name = sel.xpath('//div[@class="app-title"]/h1/text()')[0].extract()
+        appdesc_list = sel.xpath('//div[@class="app-title"]/h1/span/text()').extract()
+        app_desc = appdesc_list[0] + appdesc_list[1]
+
+        item['title'] = app_name + app_desc
+
+        item['date'] = sel.xpath('//li[@class="pub-time"]/text()')[0].extract()
+        #date format:2014-5-6
+
+        item['fromsite'] = self.name
+
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//div[@id="article_content"]')[0].extract()
+        short_desc = '<p>' + sel.xpath('//div[@class="short-des"]/text()')[0].extract() + '</p>'
+        item['content'] = short_desc + sel.xpath('//div[@id="article_content"]')[0].extract()
 
         return item
