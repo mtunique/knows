@@ -1,12 +1,12 @@
 __author__ = 'mt'
 # -*- coding: utf-8 -*-
-from knows.mongodb import db
+from knows.dbs import mongodb
 import hashlib
 
 
 def judge_link(link):
     hash = hashlib.md5(link).hexdigest().upper()
-    if db.content.find_one({'_id': hash}):
+    if mongodb.db.content.find_one({'_id': hash}):
         return True
     else:
         return False
