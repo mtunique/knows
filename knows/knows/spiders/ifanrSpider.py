@@ -15,7 +15,7 @@ class IfanrDemoCrawler(CrawlSpider):
     ]
 
     start_urls = [
-        'http://www.ifanr.com',
+        'http://www.ifanr.com/',
     ]
 
     rules = [
@@ -27,11 +27,15 @@ class IfanrDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
+        item['title'] = sel.xpath('//div[@class="entry-header"]/h1/a/text()')[0].extract()
+
+        item['date'] = sel.xpath('//meta[@name="weibo: article:create_at"]/@content')[0].extract().split(' ')[0]
+        #date format:2014-05-08
+
         item['fromsite'] = self.name
 
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//div[@class="entry-header"]/h1/a')[0].extract()+\
-                          sel.xpath('//div[@class="entry-content"]')[0].extract()
+        item['content'] = sel.xpath('//div[@class="entry-content"]')[0].extract()
 
         return item

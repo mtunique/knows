@@ -6,6 +6,7 @@ from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from knows.items import ArticleItem
 from baseFunctions import process_links
+import re
 
 
 class IfanrDemoCrawler(CrawlSpider):
@@ -27,11 +28,17 @@ class IfanrDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
+        item['title'] = sel.xpath('//div[@class="post"]/h2/text()')[0].extract()
+
+        raw_date = sel.xpath('//span[@class="date"]/text()')[0].extract()
+        raw_date_list = re.findall(r'[0-9]{2,4}', raw_date)
+        item['date'] = '-'.join(raw_date_list)
+        #date format:2014-5-7
+
         item['fromsite'] = self.name
 
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//div[@class="post"]/h2')[0].extract()+\
-                          sel.xpath('//div[@class="post"]/div[@class="content"]')[0].extract()
+        item['content'] = sel.xpath('//div[@class="post"]/div[@class="content"]')[0].extract()
 
         return item

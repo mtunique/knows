@@ -27,17 +27,26 @@ class CnblogsDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
+        try:
+            item['title'] = sel.xpath('//a[@id="cb_post_title_url"]/text()')[0].extract()
+        except Exception:
+            item['title'] = sel.xpath('//h1[@class="postTitle"]/text()')[0].extract()
+
+        item['date'] = sel.xpath('//span[@id="post-date"]/text()')[0].extract().split(' ')[0]
+        #date format:2014-05-03
+
         item['fromsite'] = self.name
 
         item['link'] = response.url
+
         try:
-            s1 = sel.xpath('//a[@id="cb_post_title_url"]/text()')[0].extract()
+            item['title'] = sel.xpath('//a[@id="cb_post_title_url"]/text()')[0].extract()
             try:
-                item['content'] = s1+sel.xpath('//div[@id="article_content"]')[0].extract()
+                item['content'] = sel.xpath('//div[@id="article_content"]')[0].extract()
             except Exception:
-                item['content'] = s1+sel.xpath('//div[@id="cnblogs_post_body"]')[0].extract()
+                item['content'] = sel.xpath('//div[@id="cnblogs_post_body"]')[0].extract()
         except Exception:
-            item['content'] = sel.xpath('//h1[@class="postTitle"]')[0].extract()+ \
-                  sel.xpath('//div[@class="postBody"]')[0].extract()
+            item['title'] = sel.xpath('//h1[@class="postTitle"]/text()')[0].extract()
+            item['content'] = sel.xpath('//div[@class="postBody"]')[0].extract()
 
         return item

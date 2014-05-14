@@ -6,13 +6,12 @@ from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.selector import Selector
 from knows.items import ArticleItem
-from scrapy.spider import BaseSpider
 from baseFunctions import judge_link
 import re
 
 
 class linuxidcSpider(CrawlSpider):
-    name = 'linux'
+    name = 'linuxidc'
     allowed_domains = ['linuxidc.com']
 
     start_urls = [
@@ -35,8 +34,16 @@ class linuxidcSpider(CrawlSpider):
 
     def parse_article(self, response):
         sel = Selector(response)
-
         item = ArticleItem()
+
+        item['title'] = sel.xpath('//h1[@class="aTitle"]/text()')[0].extract()
+
+        raw_date = sel.xpath('//table[@width="97%"]//td[@width="140"]/text()')[0].extract()
+        match_date = re.search(r'([0-9]{4}-[0-9]{1,2}-[0-9]{1,2})', raw_date)
+        item['date'] = match_date.group()
+        #date format:2014-05-06
+
+        item['fromsite'] = self.name
 
         item['link'] = response.url
 

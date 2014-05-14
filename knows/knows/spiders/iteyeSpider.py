@@ -49,12 +49,18 @@ class IteyesDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
+        item['title'] = sel.xpath('//h3/a/text()')[0].extract()
+
+        item['date'] = sel.xpath('//div[@class="blog_bottom"]//li[1]/text()')[0].extract().split(' ')[0]
+        #date format:2014-05-08
+        #Attention:This blog page date format may be like "10小时前"
+        #however, mistakes are rare
+
         item['fromsite'] = self.name+'_blog'
 
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//h3/a')[0].extract()+ \
-                          sel.xpath('//div[@id="blog_content"]')[0].extract()
+        item['content'] = sel.xpath('//div[@id="blog_content"]')[0].extract()
 
         return item
 
@@ -63,11 +69,15 @@ class IteyesDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
+        item['title'] = sel.xpath('//a[@href="'+response.url[20:]+'"]/text()')[0].extract()
+
+        item['date'] = sel.xpath('//span[@class="date"]/text()')[0].extract().split(' ')[0]
+        #date format:2014-04-22
+
         item['fromsite'] = self.name+'_news'
 
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//a[@href="'+response.url[20:]+'"]')[0].extract()+ \
-                          sel.xpath('//div[@id="news_content"]')[0].extract()
+        item['content'] = sel.xpath('//div[@id="news_content"]')[0].extract()
 
         return item
