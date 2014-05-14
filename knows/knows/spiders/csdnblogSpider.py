@@ -46,11 +46,15 @@ class CsdnDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
+        item['title'] = sel.xpath('//span[@class="link_title"]/a/text()')[0].extract()
+
+        item['date'] = sel.xpath('//span[@class="link_postdate"]/text()')[0].extract().split(' ')[0]
+        #date format:2014-05-07
+
         item['fromsite'] = self.name
 
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//span[@class="link_title"]')[0].extract() \
-                          +sel.xpath('//div[@id="article_content"]')[0].extract()
+        item['content'] = sel.xpath('//div[@id="article_content"]')[0].extract()
 
         return item

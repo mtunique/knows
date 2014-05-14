@@ -27,11 +27,15 @@ class ApkbusDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
+        item['title'] = sel.xpath('//h1[@class="ph"]/text()')[0].extract()
+
+        item['date'] = sel.xpath('//p[@class="xg1"]/text()')[0].extract().split(' ')[0].split('\n')[1]
+        #date format:2014-5-9
+
         item['fromsite'] = self.name
 
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//h1[@class="ph"]/text()')[0].extract()+\
-                          sel.xpath('//td[@id="article_content"]')[0].extract()
+        item['content'] = sel.xpath('//td[@id="article_content"]')[0].extract()
 
         return item

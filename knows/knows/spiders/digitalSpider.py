@@ -12,7 +12,7 @@ import re
 
 
 class digitalSpider(CrawlSpider):
-    name = "digital"
+    name = "digitalTencent"
     allowed_domains = ["qq.com"]
 
     start_urls = [
@@ -35,6 +35,17 @@ class digitalSpider(CrawlSpider):
         sel = Selector(response)
 
         item = ArticleItem()
+
+        item['title'] = sel.xpath('//div[@class="hd"]/h1/text()')[0].extract()
+
+        raw_date = sel.xpath('//span[@class="pubTime"]/text()')[0].extract()
+        match_list = re.findall(r'([0-9]{2,4})', raw_date)
+        #separate into [u'2014', u'05', u'10', u'07', u'51'], only need the first 3 elements
+        real_date = '-'.join(match_list[0:3])
+        item['date'] = real_date
+        #date format:2014-05-06
+
+        item['fromsite'] = self.name
 
         item['link'] = response.url
 

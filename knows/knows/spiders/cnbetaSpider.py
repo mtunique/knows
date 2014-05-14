@@ -1,4 +1,5 @@
 __author__ = 'M.X'
+# -*- coding: UTF-8 -*-
 
 from scrapy.http import Request
 from scrapy.contrib.spiders import CrawlSpider, Rule
@@ -32,11 +33,12 @@ class cnBetaSpider(BaseSpider):
 
         item['content'] = sel.xpath('//div[@class="content"]')[0].extract()
 
-        item['fromsite'] = 'cnBeta'
+        item['fromsite'] = self.name
 
         item['link'] = response.url
 
-        item['date'] = sel.xpath('//span[@class="date"]/text()')[0].extract()
+        item['date'] = sel.xpath('//span[@class="date"]/text()')[0].extract().split(' ')[0]
+        #date format:2014-05-07
 
         item['title'] = sel.xpath('//div[@class="body"]/header/h2/text()')[0].extract()
 

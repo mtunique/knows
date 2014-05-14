@@ -12,7 +12,7 @@ import re
 
 
 class pmSpider(CrawlSpider):
-    name = "pm"
+    name = "woshipm"
     allowed_domains = ["woshipm.com"]
 
     start_urls = [
@@ -38,12 +38,18 @@ class pmSpider(CrawlSpider):
 
         item = ArticleItem()
 
+        item['title'] = sel.xpath('//div[@class="con_title"]/h1/text()')[0].extract()
+
+        item['date'] = sel.xpath('//span[@class="con_t_time"]/text()')[0].extract().split(' ')[0]
+        #date format:2014-05-06
+
+        item['fromsite'] = self.name
+
         item['link'] = response.url
 
-        raw_content = sel.xpath('//div[@class="con_txt clx"]/p').extract()
+        raw_content = sel.xpath('//div[@class="con_txt clx"]/*[position()<(last()-1)]').extract()
         for str in raw_content:
             real_content = str + real_content
-
         item['content'] = real_content
 
         return item

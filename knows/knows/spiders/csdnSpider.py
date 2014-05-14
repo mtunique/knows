@@ -28,12 +28,16 @@ class CsdnDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
-        item['fromsite'] = 'csdn'
+        item['title'] = sel.xpath('//h1[@class="title"]/text()')[0].extract()
+
+        item['date'] = response.url.split('/')[4]
+        #date format:2014-05-07
+
+        item['fromsite'] = self.name
 
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//h1[@class="title"]')[0].extract() \
-                          +sel.xpath('//div[@class="con news_content"]')[0].extract()
+        item['content'] = sel.xpath('//div[@class="con news_content"]')[0].extract()
 
         return item
 
@@ -42,12 +46,17 @@ class CsdnDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
+        item['title'] = sel.xpath('//h1/text()')[0].extract()
+
+        raw_date = sel.xpath('//ul[@class="pull-left"]/li[1]/text()')[0].extract()
+        item['date'] = raw_date[1:11]
+        #date format:2014-05-07
+
         item['fromsite'] = self.name
 
         item['link'] = response.url
 
-        item['content'] = sel.xpath('//h1')[0].extract()+\
-                          sel.xpath('//div[@class="content document_file_content"]')[0].extract()
+        item['content'] = sel.xpath('//div[@class="content document_file_content"]')[0].extract()
 
 
         return item
