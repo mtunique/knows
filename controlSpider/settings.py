@@ -14,7 +14,7 @@ SPIDER_INTERVAL = {
     'iteye': 3600,
     'oschina': 3700,
     'coolshell': 13600,
-    'csdnblog': 3900,
+    'csdn_blog': 3900,
     'ifanr': 4000,
     'xuebuyuan': 4100,
 
