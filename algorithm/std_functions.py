@@ -32,4 +32,3 @@ def doc_to_vector(doc):
         except KeyError:
             ans.append(0.)
     return ans
-

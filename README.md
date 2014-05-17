@@ -8,6 +8,8 @@ Android app knows server by mtunique.
 + s_content
 + vector
 + v_content
++ push_list
++ user
 
 ##redis
 + content
