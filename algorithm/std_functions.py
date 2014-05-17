@@ -20,7 +20,7 @@ def cos(x, y):
         print "Vectors' lengths are different"
 
 
-def doc_vector(doc):
+def doc_to_vector(doc):
     ids, count = parse_doc_list(doc)
     temp_dict = {}
     for i, num in ids, count:
@@ -32,4 +32,3 @@ def doc_vector(doc):
         except KeyError:
             ans.append(0.)
     return ans
-
