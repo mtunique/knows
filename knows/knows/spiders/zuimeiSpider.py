@@ -51,4 +51,6 @@ class zuimeiSpider(CrawlSpider):
         short_desc = '<p>' + sel.xpath('//div[@class="short-des"]/text()')[0].extract() + '</p>'
         item['content'] = short_desc + sel.xpath('//div[@id="article_content"]')[0].extract()
 
+        item['tag'] = 'PM&APP'
+
         return item

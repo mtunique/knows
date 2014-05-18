@@ -52,4 +52,6 @@ class pmSpider(CrawlSpider):
             real_content = str + real_content
         item['content'] = real_content
 
+        item['tag'] = 'PM&APP'
+
         return item

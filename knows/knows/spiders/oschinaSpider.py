@@ -44,6 +44,8 @@ class OschinaDemoCrawler(CrawlSpider):
 
         item['content'] = sel.xpath('//div[@class="BlogContent"]')[0].extract()
 
+        item['tag'] = 'blogs'
+
         return item
 
     def parse_article_news(self, response):
@@ -63,5 +65,7 @@ class OschinaDemoCrawler(CrawlSpider):
         item['link'] = response.url
 
         item['content'] = sel.xpath('//div[@class="Body NewsContent TextContent"]')[0].extract()
+
+        item['tag'] = 'news'
 
         return item

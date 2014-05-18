@@ -10,3 +10,5 @@ class ArticleItem(Item):
     link = Field()
     #when it's an article,it contains the content&pics
     content = Field()
+    #tags according to websites
+    tag = Field()

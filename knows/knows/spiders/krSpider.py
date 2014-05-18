@@ -46,4 +46,6 @@ class KrDemoCrawler(CrawlSpider):
 
         item['content'] = sel.xpath('//section[@class="article"]')[0].extract()
 
+        item['tag'] = 'news'
+
         return item

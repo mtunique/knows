@@ -6,6 +6,8 @@ from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from knows.items import ArticleItem
 from baseFunctions import process_links
+from baseFunctions import judge_link
+from scrapy.http import Request
 
 
 class IteyesDemoCrawler(CrawlSpider):
@@ -39,10 +41,26 @@ class IteyesDemoCrawler(CrawlSpider):
         'http://www.iteye.com/news/category/other',
     ]
 
-    rules = [
-        Rule(SgmlLinkExtractor(allow='/blog/[0-9]+$',), callback='parse_article_blog', process_links=process_links),
-        Rule(SgmlLinkExtractor(allow='/news/[0-9]+[^#]$',), callback='parse_article_news', process_links=process_links)
-    ]
+    def parse_start_url(self, response):
+        slp = Selector(response)
+
+        if "blogs" in response.url:
+            url_list_blogs = slp.xpath('//div[@class="content"]/h3/a/@href').extract()
+
+            for url in url_list_blogs:
+                new_url_blogs = url
+                if judge_link(new_url_blogs):
+                    continue
+                yield Request(new_url_blogs, callback=self.parse_article_blog)
+
+        else:
+            raw_url_list_news = slp.xpath('//div[@class="content"]/h3/a/@href').extract()
+
+            for url in raw_url_list_news:
+                new_url_news = "http://www.iteye.com" + url
+                if judge_link(new_url_news):
+                    continue
+                yield Request(new_url_news, callback=self.parse_article_news)
 
     def parse_article_blog(self, response):
         sel = Selector(response)
@@ -62,6 +80,8 @@ class IteyesDemoCrawler(CrawlSpider):
 
         item['content'] = sel.xpath('//div[@id="blog_content"]')[0].extract()
 
+        item['tag'] = 'blogs'
+
         return item
 
     def parse_article_news(self, response):
@@ -79,5 +99,7 @@ class IteyesDemoCrawler(CrawlSpider):
         item['link'] = response.url
 
         item['content'] = sel.xpath('//div[@id="news_content"]')[0].extract()
+
+        item['tag'] = 'news'
 
         return item

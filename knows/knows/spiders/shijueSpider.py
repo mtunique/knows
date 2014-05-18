@@ -48,4 +48,6 @@ class shijueSpider(CrawlSpider):
 
         item['content'] = sel.xpath('//div[@class="article-body mt-20"]')[0].extract()
 
+        item['tag'] = 'Design'
+
         return item

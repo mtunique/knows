@@ -57,4 +57,6 @@ class CsdnDemoCrawler(CrawlSpider):
 
         item['content'] = sel.xpath('//div[@id="article_content"]')[0].extract()
 
+        item['tag'] = 'blogs'
+
         return item

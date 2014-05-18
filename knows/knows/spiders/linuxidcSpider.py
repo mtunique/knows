@@ -49,4 +49,6 @@ class linuxidcSpider(CrawlSpider):
 
         item['content'] = sel.xpath('//div[@id="printBody"]//div[@id="content"]/p[2]')[0].extract()
 
+        item['tag'] = 'IT'
+
         return item

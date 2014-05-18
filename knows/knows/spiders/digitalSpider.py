@@ -55,4 +55,6 @@ class digitalSpider(CrawlSpider):
 
         item['content'] = real_content
 
+        item['tag'] = 'news'
+
         return item
