@@ -30,7 +30,7 @@ class XuebuyuanDemoCrawler(CrawlSpider):
         for url in slp.xpath('//span[@class="archive_more"]/a/@href').extract():
             new_url = url
             if judge_link(new_url):
-               continue
+                continue
             yield Request(new_url, callback="parse_article")
 
 
