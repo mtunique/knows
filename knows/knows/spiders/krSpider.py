@@ -24,7 +24,7 @@ class KrDemoCrawler(CrawlSpider):
         slp = Selector(response)
 
         for url in slp.xpath('//article[@class="posts post-1 cf"]//div[@class="meta"]/a/@href').extract():
-            new_url = 'http://www.36kr.com/' + url
+            new_url = 'http://www.36kr.com' + url
 
             if judge_link(new_url):
                 continue
