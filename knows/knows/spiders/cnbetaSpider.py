@@ -42,4 +42,6 @@ class cnBetaSpider(BaseSpider):
 
         item['title'] = sel.xpath('//div[@class="body"]/header/h2/text()')[0].extract()
 
+        item['tag'] = 'news'
+
         return item

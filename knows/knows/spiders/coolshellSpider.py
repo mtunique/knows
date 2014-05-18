@@ -41,4 +41,6 @@ class IfanrDemoCrawler(CrawlSpider):
 
         item['content'] = sel.xpath('//div[@class="post"]/div[@class="content"]')[0].extract()
 
+        item['tag'] = 'Tech'
+
         return item

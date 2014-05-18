@@ -38,4 +38,6 @@ class ApkbusDemoCrawler(CrawlSpider):
 
         item['content'] = sel.xpath('//td[@id="article_content"]')[0].extract()
 
+        item['tag'] = 'Android'
+
         return item

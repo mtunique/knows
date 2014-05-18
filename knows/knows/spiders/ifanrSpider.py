@@ -38,4 +38,6 @@ class IfanrDemoCrawler(CrawlSpider):
 
         item['content'] = sel.xpath('//div[@class="entry-content"]')[0].extract()
 
+        item['tag'] = 'news'
+
         return item

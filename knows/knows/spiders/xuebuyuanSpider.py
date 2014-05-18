@@ -52,4 +52,6 @@ class XuebuyuanDemoCrawler(CrawlSpider):
 
         item['content'] = sel.xpath('//div[@id="article_content"]')[0].extract()
 
+        item['tag'] = 'Tech'
+
         return item

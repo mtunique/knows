@@ -49,4 +49,6 @@ class CnblogsDemoCrawler(CrawlSpider):
             item['title'] = sel.xpath('//h1[@class="postTitle"]/text()')[0].extract()
             item['content'] = sel.xpath('//div[@class="postBody"]')[0].extract()
 
+        item['tag'] = 'blogs'
+
         return item

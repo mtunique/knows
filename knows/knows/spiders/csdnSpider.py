@@ -58,5 +58,7 @@ class CsdnDemoCrawler(CrawlSpider):
 
         item['content'] = sel.xpath('//div[@class="content document_file_content"]')[0].extract()
 
+        item['tag'] = 'news'
+
 
         return item
