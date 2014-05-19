@@ -37,7 +37,7 @@ def main():
             break
         flag = l[-1]['time']
 
-        doc_set = [a['s'] for a in l]
+        doc_set = [mongodb.db.s_content.find_one({"_id": a['_id']})['s'] for a in l]
         # Give them to online LDA
         (gamma, bound) = old_a.update_lambda(doc_set)
         # Compute an estimate of held-out perplexity
@@ -55,8 +55,7 @@ def main():
             numpy.savetxt('gamma-%d.dat' % iteration, gamma)
 
     for num in range(len(old_a._lambda)):
-        for line in old_a._lambda[num]:
-            mongodb.db.vector.update({'_id': str(num)}, {'_id': str(num), 'v': list(line)}, upsert=True)
+        mongodb.db.vector.update({'_id': str(num)}, {'_id': str(num), 'v': list(old_a._lambda[num])}, upsert=True)
 
 if __name__ == '__main__':
     main()
