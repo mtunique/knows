@@ -41,3 +41,11 @@ class RegisterHandler(tornado.web.RequestHandler):
                            self.request.arguments['type'][0])
         except Exception as err:
             self.write('参数错误' + err.message)
+
+
+class CollectHandler(tornado.web.RedirectHandler):
+    def post(self, *args, **kwargs):
+        pass
+
+    def get(self):
+        pass
