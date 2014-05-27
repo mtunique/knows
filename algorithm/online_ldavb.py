@@ -1,6 +1,6 @@
 __author__ = 'mt'
 # -*- coding: utf-8 -*-
-import sys, re, time, string
+import re
 import numpy as n
 from scipy.special import gammaln, psi
 
@@ -8,12 +8,20 @@ n.random.seed(100000001)
 meanchangethresh = 0.001
 
 
+def dirichlet_expectation(alpha):
+    """
+    For a vector theta ~ Dir(alpha), computes E[log(theta)] given alpha.
+    """
+    if len(alpha.shape) == 1:
+        return psi(alpha) - psi(n.sum(alpha))
+    return psi(alpha) - psi(n.sum(alpha, 1))[:, n.newaxis]
+
 import jieba
 import jieba.analyse
 #jieba.initialize()
 
 
-def parse_doc_list_test(docs, vocab):
+def parse_doc_list(docs, vocab):
     """
     @param docs: A List of documents. Each document must be a string
     @param vocab: No_stop_words vocabularies, that's to say only when the word is in this list will it not be ignored
@@ -42,60 +50,18 @@ def parse_doc_list_test(docs, vocab):
                 if not wordtoken in ddict:
                     ddict[wordtoken] = 0
                 ddict[wordtoken] += 1
-        wordids.append(ddict.keys())
-        wordcts.append(ddict.values())
+
+        if len(ddict.keys()):
+            wordids.append([i-1 for i in ddict.keys()])
+        # else:
+        #     wordids.append([1])
+
+        if len(ddict.values()):
+            wordcts.append(ddict.values())
+        # else:
+        #     wordids.append([1])
 
     return wordids, wordcts
-
-def parse_doc_list(docs, vocab):
-    """
-    Parse a document into a list of word ids and a list of counts,
-    or parse a set of documents into two lists of lists of word ids
-    and counts.
-
-    Arguments: 
-    docs:  List of D documents. Each document must be represented as
-           a single string. (Word order is unimportant.) Any
-           words not in the vocabulary will be ignored.
-    vocab: Dictionary mapping from words to integer ids.
-
-    Returns a pair of lists of lists. 
-
-    The first, wordids, says what vocabulary tokens are present in
-    each document. wordids[i][j] gives the jth unique token present in
-    document i. (Don't count on these tokens being in any particular
-    order.)
-
-    The second, wordcts, says how many times each vocabulary token is
-    present. wordcts[i][j] is the number of times that the token given
-    by wordids[i][j] appears in document i.
-    """
-    if type(docs).__name__ == 'str':
-        temp = list()
-        temp.append(docs)
-        docs = temp
-
-    D = len(docs)
-    
-    wordids = list()
-    wordcts = list()
-    for d in range(0, D):
-        docs[d] = docs[d].lower()
-        docs[d] = re.sub(r'-', " ", docs[d])
-        docs[d] = re.sub(r'[^a-z ]', '', docs[d])
-        docs[d] = re.sub(r' +', ' ', docs[d])
-        words = string.split(docs[d])
-        ddict = dict()
-        for word in words:
-            if (word in vocab):
-                wordtoken = vocab[word]
-                if (not wordtoken in ddict):
-                    ddict[wordtoken] = 0
-                ddict[wordtoken] += 1
-        wordids.append(ddict.keys())
-        wordcts.append(ddict.values())
-
-    return((wordids, wordcts))
 
 
 class OnlineLDA:
@@ -164,6 +130,9 @@ class OnlineLDA:
             docs = temp
 
         wordids, wordcts = parse_doc_list(docs, self._vocab)
+        for i in xrange(64-len(wordids)):
+            wordids = wordids + [[1]]
+            wordcts = wordcts + [[1]]
         batchD = len(docs)
 
         # Initialize the variational distribution q(theta|gamma) for
@@ -184,7 +153,7 @@ class OnlineLDA:
             Elogthetad = Elogtheta[d, :]
             expElogthetad = expElogtheta[d, :]
             expElogbetad = self._expElogbeta[:, ids]
-            # The optimal phi_{dwk} is proportional to 
+            # The optimal phi_{dwk} is proportional to
             # expElogthetad_k * expElogbetad_w. phinorm is the normalizer.
             phinorm = n.dot(expElogthetad, expElogbetad) + 1e-100
             # Iterate between gamma and phi until convergence
@@ -209,7 +178,7 @@ class OnlineLDA:
 
         # This step finishes computing the sufficient statistics for the
         # M step, so that
-        # sstats[k, w] = \sum_d n_{dw} * phi_{dwk} 
+        # sstats[k, w] = \sum_d n_{dw} * phi_{dwk}
         # = \sum_d n_{dw} * exp{Elogtheta_{dk} + Elogbeta_{kw}} / phinorm_{dw}.
         sstats = sstats * self._expElogbeta
 
@@ -274,6 +243,10 @@ class OnlineLDA:
             docs = temp
 
         wordids, wordcts = parse_doc_list(docs, self._vocab)
+        for i in xrange(64-len(wordids)):
+            wordids = wordids + [[1]]
+            wordcts = wordcts + [[1]]
+
         batchD = len(docs)
 
         score = 0

@@ -1,7 +1,7 @@
 __author__ = 'mt'
 # -*- coding: utf-8 -*-
 
-import cPickle, string, numpy, getopt, sys, random, time, re, pprint
+import numpy, sys
 from dbs import mongodb
 from pymongo import DESCENDING
 import online_ldavb
@@ -37,7 +37,15 @@ def main():
             break
         flag = l[-1]['time']
 
-        doc_set = [mongodb.db.s_content.find_one({"_id": a['_id']})['s'] for a in l]
+        doc_set = []
+        for a in l:
+            try:
+                doc_set.append(mongodb.db.s_content.find_one({"_id": a['_id']})['s'])
+            except Exception as err:
+                print a, err.args
+
+        if not doc_set:
+            break
         # Give them to online LDA
         (gamma, bound) = old_a.update_lambda(doc_set)
         # Compute an estimate of held-out perplexity
