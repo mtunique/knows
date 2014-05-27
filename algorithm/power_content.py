@@ -1,5 +1,6 @@
 __author__ = 'mt'
 # -*- coding: utf-8 -*-
+import sys
 from dbs import redisdb
 from dbs import mongodb
 from bs4 import BeautifulSoup
@@ -23,7 +24,10 @@ def main():
             mongodb.db.v_content.update({'_id': content_hash}, {'$set': {'v': doc_to_vector(string)}}, upsert=True)
             redisdb.db.lpush('s_content', content_hash)
         except Exception as err:
-            print '[%s] %s' % (content_hash, err.message)
+            print '[%s] %s' % (content_hash, str(err.args))
 
 if __name__ == '__main__':
+    outfile = open('power.log', 'w')
+    sys.stderr = outfile
+    sys.stdout = outfile
     main()

@@ -11,7 +11,7 @@ SPIDER_INTERVAL = {
     'apkbus': 3300,
     'cnblogs': 3400,
     'csdn': 3500,
-    'iteye': 3600,
+    #'iteye': 3600,
     'oschina': 3700,
     'coolshell': 13600,
     'csdn_blog': 3900,

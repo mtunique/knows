@@ -19,6 +19,7 @@ if __name__ == '__main__':
         (r"/list/*", ListHandler),
         (r"/article*", ArticleHandler),
         (r"/register*", RegisterHandler),
+        (r"/collect*", CollectHandler),
         ],
         **settings)
 

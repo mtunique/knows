@@ -1,6 +1,7 @@
 knows
 =====
-Android app knows server by mtunique.
+IT新闻 博客 整合APP。
+智能推荐。
 #DB
 ##mongodb
 + article
