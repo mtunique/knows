@@ -4,14 +4,17 @@ import datetime
 import hashlib
 from knows.items import ArticleItem
 import time
+from bs4 import BeautifulSoup
 
 
 class SpiderPipeline(object):
+    @staticmethod
     def process_item(self, item, spider):
         return item
 
 
 class ArticleInsertPipeline(object):
+    @staticmethod
     def process_item(self, item, spider=None):
         tmp_item = dict(item)
 
@@ -25,7 +28,7 @@ class ArticleInsertPipeline(object):
         time.sleep(0.001)
 
         tmp_item['content'] = '<!DOCTYPE html>\n<html>\n<head>\n<script src="file:///android_asset/my.js"></script' \
-                              '>\n</head>\n<body>\n'+tmp_item['content']+'</body>\n</html>'
+                              '>\n</head>\n<body>\n%s</body>\n</html>' %tmp_item['content']
 
         #insert article information & content into db
         mongodb.db.content.update({'_id': tmp_item['_id']},
