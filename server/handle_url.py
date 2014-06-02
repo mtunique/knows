@@ -33,3 +33,12 @@ class CollectHandler(tornado.web.RedirectHandler):
     @handle_err
     def get(self):
         self.write(get_collect_list(self.request.arguments['uid'][0]))
+
+
+class LikeHandler(tornado.web.RedirectHandler):
+    @handle_err
+    def get(self):
+        mongodb.db.like.update(
+            {'_id':self.request.arguments['uid']},
+            {'$push':{'hash': self.request.arguments['hash']}},
+            upsert=True)
