@@ -38,7 +38,11 @@ class CollectHandler(tornado.web.RedirectHandler):
 class LikeHandler(tornado.web.RedirectHandler):
     @handle_err
     def get(self):
+        if self.request.arguments['hash'] == '1':
+            tp = '$addToSet'
+        elif self.request.arguments['hash'] == '0':
+            tp = 'pull'
         mongodb.db.like.update(
             {'_id':self.request.arguments['uid']},
-            {'$push':{'hash': self.request.arguments['hash']}},
+            {tp: {'hash': self.request.arguments['hash']}},
             upsert=True)
