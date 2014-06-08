@@ -31,7 +31,7 @@ class pmSpider(CrawlSpider):
             new_url = url
             if judge_link(new_url):
                 continue
-            yield Request(new_url, callback="parse_article")
+            yield Request(new_url, callback=self.parse_article)
 
     def parse_article(self, response):
         sel = Selector(response)
