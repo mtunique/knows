@@ -27,11 +27,6 @@ class CnblogsDemoCrawler(CrawlSpider):
 
         item = ArticleItem()
 
-        try:
-            item['title'] = sel.xpath('//a[@id="cb_post_title_url"]/text()')[0].extract()
-        except Exception:
-            item['title'] = sel.xpath('//h1[@class="postTitle"]/text()')[0].extract()
-
         item['date'] = sel.xpath('//span[@id="post-date"]/text()')[0].extract().split(' ')[0]
         #date format:2014-05-03
 
