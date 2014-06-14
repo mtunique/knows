@@ -6,7 +6,17 @@ import time
 from handle_user import *
 
 
+def handle_err(func):
+    def real(self):
+        try:
+            func(self)
+        except Exception as err:
+            print '参数错误  %s' % str(err.message)
+    return real
+
+
 class ListHandler(tornado.web.RequestHandler):
+    @handle_err
     def get(self):
         if self.request.arguments['time'][0] == '0':
             self.request.arguments['time'][0] = str(int(time.time()*10000))
@@ -14,38 +24,25 @@ class ListHandler(tornado.web.RequestHandler):
 
 
 class ArticleHandler(tornado.web.RequestHandler):
+    @handle_err
     def get(self):
         self.write(get_content_as_json(self.request.arguments['hash'][0]))
 
 
-class RegisterHandler(tornado.web.RequestHandler):
-    def post(self):
-        try:
-            if self.request.arguments['what'][0] == 'register':
-                add_user(self.request.arguments['main-uid'][0])
-                self.write("{'ret':0}")
-            if self.request.arguments['what'][0] == 'merge':
-                merge_user(self.request.arguments['main-uid'][0], self.request.arguments['merge-uid'][0],
-                           self.request.arguments['type'][0])
-        except Exception as err:
-            self.write('参数错误' + err.message)
-        print self.request.argumentss
-
-    def get(self):
-        try:
-            if self.request.arguments['what'][0] == 'register':
-                add_user(self.request.arguments['main-uid'][0])
-                self.write("{'ret':0}")
-            if self.request.arguments['what'][0] == 'merge':
-                merge_user(self.request.arguments['main-uid'][0], self.request.arguments['merge-uid'][0],
-                           self.request.arguments['type'][0])
-        except Exception as err:
-            self.write('参数错误' + err.message)
-
-
 class CollectHandler(tornado.web.RedirectHandler):
-    def post(self, *args, **kwargs):
-        pass
-
+    @handle_err
     def get(self):
-        pass
+        self.write(get_collect_list(self.request.arguments['uid'][0]))
+
+
+class LikeHandler(tornado.web.RedirectHandler):
+    @handle_err
+    def get(self):
+        if self.request.arguments['hash'] == '1':
+            tp = '$addToSet'
+        elif self.request.arguments['hash'] == '0':
+            tp = 'pull'
+        mongodb.db.like.update(
+            {'_id':self.request.arguments['uid']},
+            {tp: {'hash': self.request.arguments['hash']}},
+            upsert=True)
