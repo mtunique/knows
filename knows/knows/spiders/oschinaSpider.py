@@ -56,7 +56,7 @@ class OschinaDemoCrawler(CrawlSpider):
         item['title'] = sel.xpath('//h1[@class="OSCTitle"]/text()')[0].extract()
 
         raw_date = sel.xpath('//div[@class="PubDate"]/text()')[1].extract()
-        raw_date_list = re.findall(r'[0-9]{2,4}', str)
+        raw_date_list = re.findall(r'[0-9]{2,4}', raw_date)
         item['date'] = '-'.join(raw_date_list)
         #date format:2014-05-11
 
