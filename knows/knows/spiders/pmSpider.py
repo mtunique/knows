@@ -48,6 +48,7 @@ class pmSpider(CrawlSpider):
         item['link'] = response.url
 
         raw_content = sel.xpath('//div[@class="con_txt clx"]/*[position()<(last()-1)]').extract()
+        real_content = ''
         for str in raw_content:
             real_content = str + real_content
         item['content'] = real_content

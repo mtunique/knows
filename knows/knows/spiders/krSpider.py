@@ -17,7 +17,13 @@ class KrDemoCrawler(CrawlSpider):
     ]
 
     start_urls = [
-        "http://www.36kr.com/topic/technology"
+        "http://www.36kr.com/topic/technology",
+        "http://www.36kr.com/topic/startups",
+        "http://www.36kr.com/topic/products",
+        "http://www.36kr.com/topic/apps",
+        "http://www.36kr.com/topic/websites",
+        "http://www.36kr.com/topic/brands",
+        "http://www.36kr.com/topic/devices",
     ]
 
     def parse_start_url(self, response):
