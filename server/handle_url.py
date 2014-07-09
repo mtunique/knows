@@ -72,6 +72,26 @@ class UserHandler(tornado.web.RequestHandler):
                                        'uid': self.request.arguments['uid'][0]},
                                       {'$set': info},
                                       upsert=True)
-        self.write({'_id':main_id,
+        self.write(str({'_id':main_id,
                     'merger_info':list(mongodb.db.merger_info.find({'way': self.request.arguments['way'][0],
-                                                                'uid': self.request.arguments['uid'][0]}))})
+                                                                'uid': self.request.arguments['uid'][0]}))}))
+    @handle_err
+    def get(self):
+        db_info = mongodb.db.merger_info.find_one({'way': self.request.arguments['way'][0],
+                                                  'uid': self.request.arguments['uid'][0]})
+        if db_info:
+            main_id = db_info['main_id']
+        else:
+            main_id = k_user.create_id(self.request.arguments['way'][0]+self.request.arguments['uid'][0])
+        info = {'way': self.request.arguments['way'][0],
+                'uid': self.request.arguments['uid'][0],
+                'name': self.request.arguments['name'][0],
+                'token': self.request.arguments['token'][0],
+                'main_id': main_id}
+        mongodb.db.merger_info.update({'way': self.request.arguments['way'][0],
+                                       'uid': self.request.arguments['uid'][0]},
+                                      {'$set': info},
+                                      upsert=True)
+        self.write(str({'_id':main_id,
+                    'merger_info':list(mongodb.db.merger_info.find({'way': self.request.arguments['way'][0],
+                                                                'uid': self.request.arguments['uid'][0]}))}))
