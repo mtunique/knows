@@ -74,7 +74,8 @@ class UserHandler(tornado.web.RequestHandler):
                                       upsert=True)
         self.write(json.dumps({'_id':main_id,
                     'merger_info':list(mongodb.db.merger_info.find({'way': self.request.arguments['way'][0],
-                                                                'uid': self.request.arguments['uid'][0]}))}))
+                                                                    'uid': self.request.arguments['uid'][0]},
+                                                                   {'_id': 0}))}))
     @handle_err
     def get(self):
         db_info = mongodb.db.merger_info.find_one({'way': self.request.arguments['way'][0],
@@ -95,4 +96,4 @@ class UserHandler(tornado.web.RequestHandler):
         self.write(json.dumps({'_id':main_id,
                     'merger_info':list(mongodb.db.merger_info.find({'way': self.request.arguments['way'][0],
                                                                     'uid': self.request.arguments['uid'][0]},
-                                                                   {'_id':0}))}))
+                                                                   {'_id': 0}))}))
