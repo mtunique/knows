@@ -14,7 +14,7 @@ settings = {
         }
 
 if __name__ == '__main__':
-    app = tornado.wsgi.WSGIApplication([
+    app = tornado.web.Application([
         (r"/list*", ListHandler),
         (r"/article*", ArticleHandler),
         (r"/collect*", CollectHandler),
