@@ -72,7 +72,7 @@ class UserHandler(tornado.web.RequestHandler):
                                        'uid': self.request.arguments['uid'][0]},
                                       {'$set': info},
                                       upsert=True)
-        self.write(json.dumps({'_id':main_id,
+        self.write(json.dumps({'_id': main_id,
                     'merger_info':list(mongodb.db.merger_info.find({'way': self.request.arguments['way'][0],
                                                                     'uid': self.request.arguments['uid'][0]},
                                                                    {'_id': 0}))}))
