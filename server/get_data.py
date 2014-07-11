@@ -6,7 +6,7 @@ from dbs.mongodb import db
 
 
 def ids_list_to_article_list(ids, time, limit=15):
-    return list(db.content.find({'_id': {'$in': ids}, "time": {"$lt": time}}).sort("time", DESCENDING).limit(limit))
+    return list(db.article.find({'_id': {'$in': ids}, "time": {"$lt": time}}).sort("time", DESCENDING).limit(limit))
 
 
 def get_content_as_json(data):
@@ -22,7 +22,7 @@ def get_article_list_as_json(user, time):
 
 def get_collect_list(uid, time):
     try:
-        l = [db.collect.find({"_id": uid})]
+        l = db.like.find_one({"_id": uid})['hash']
     except Exception as err:
         print err.message
         return []
