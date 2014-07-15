@@ -30,13 +30,13 @@ class ArticleHandler(tornado.web.RequestHandler):
         self.write(get_content_as_json(self.request.arguments['hash'][0]))
 
 
-class CollectHandler(tornado.web.RedirectHandler):
+class CollectHandler(tornado.web.RequestHandler):
     @handle_err
     def get(self):
         self.write(get_collect_list(self.request.arguments['uid'][0]))
 
 
-class LikeHandler(tornado.web.RedirectHandler):
+class LikeHandler(tornado.web.RequestHandler):
     @handle_err
     def get(self):
         tp = ''
@@ -54,7 +54,7 @@ class LikeHandler(tornado.web.RedirectHandler):
             self.write(0)
 
 
-class UserHandler(tornado.web.RedirectHandler):
+class UserHandler(tornado.web.RequestHandler):
     @handle_err
     def post(self):
         db_info = mongodb.db.merger_info.find_one({'way': self.request.arguments['way'][0],
@@ -62,7 +62,7 @@ class UserHandler(tornado.web.RedirectHandler):
         if db_info:
             main_id = db_info['main_id']
         else:
-            main_id = k_user.creat_id()
+            main_id = k_user.create_id(self.request.arguments['way'][0]+self.request.arguments['uid'][0])
         info = {'way': self.request.arguments['way'][0],
                 'uid': self.request.arguments['uid'][0],
                 'name': self.request.arguments['name'][0],
@@ -72,6 +72,28 @@ class UserHandler(tornado.web.RedirectHandler):
                                        'uid': self.request.arguments['uid'][0]},
                                       {'$set': info},
                                       upsert=True)
-        self.write({'_id':main_id,
+        self.write(json.dumps({'_id': main_id,
                     'merger_info':list(mongodb.db.merger_info.find({'way': self.request.arguments['way'][0],
-                                                                'uid': self.request.arguments['uid'][0]}))})
+                                                                    'uid': self.request.arguments['uid'][0]},
+                                                                   {'_id': 0}))}))
+    @handle_err
+    def get(self):
+        db_info = mongodb.db.merger_info.find_one({'way': self.request.arguments['way'][0],
+                                                  'uid': self.request.arguments['uid'][0]})
+        if db_info:
+            main_id = db_info['main_id']
+        else:
+            main_id = k_user.create_id(self.request.arguments['way'][0]+self.request.arguments['uid'][0])
+        info = {'way': self.request.arguments['way'][0],
+                'uid': self.request.arguments['uid'][0],
+                'name': self.request.arguments['name'][0],
+                'token': self.request.arguments['token'][0],
+                'main_id': main_id}
+        mongodb.db.merger_info.update({'way': self.request.arguments['way'][0],
+                                       'uid': self.request.arguments['uid'][0]},
+                                      {'$set': info},
+                                      upsert=True)
+        self.write(json.dumps({'_id':main_id,
+                    'merger_info':list(mongodb.db.merger_info.find({'way': self.request.arguments['way'][0],
+                                                                    'uid': self.request.arguments['uid'][0]},
+                                                                   {'_id': 0}))}))

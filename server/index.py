@@ -5,7 +5,6 @@ import tornado.wsgi
 import tornado.ioloop
 import tornado.web
 import tornado.httpserver
-import wsgiref.simple_server
 import os
 
 from handle_url import *
@@ -15,8 +14,8 @@ settings = {
         }
 
 if __name__ == '__main__':
-    app = tornado.wsgi.WSGIApplication([
-        (r"/list/*", ListHandler),
+    app = tornado.web.Application([
+        (r"/list*", ListHandler),
         (r"/article*", ArticleHandler),
         (r"/collect*", CollectHandler),
         (r"/user*", UserHandler),
@@ -24,5 +23,5 @@ if __name__ == '__main__':
         ],
         **settings)
 
-    server = wsgiref.simple_server.make_server('', 8080, app)
-    server.serve_forever()
+    app.listen(8080)
+    tornado.ioloop.IOLoop.instance().start()
