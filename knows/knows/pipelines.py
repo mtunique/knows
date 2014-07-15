@@ -34,8 +34,10 @@ class ArticleInsertPipeline(object):
             except IndexError:
                 pass
 
-        tmp_item['content'] = '<!DOCTYPE html>\n<html>\n<head>\n<script src="file:///android_asset/my.js"></script' \
-                              '>\n</head>\n<body>\n%s</body>\n</html>' % tmp_item['content']
+        # link css href need to be reset according to the android device
+        tmp_item['content'] = '<!DOCTYPE html><html><head><link rel="stylesheet" href="mystyle.css"><meta ' \
+                              'charset="utf-8"><script src="file:///android_asset/my.js"></script' \
+                              '></head><body><div class="article_content">%s</div></body></html>' % tmp_item['content']
 
         #insert article information & content into db
         mongodb.db.content.update({'_id': tmp_item['_id']},
