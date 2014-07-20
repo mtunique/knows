@@ -1,6 +1,5 @@
 __author__ = 'mt'
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 import tornado.wsgi
 import tornado.ioloop
 import tornado.web
@@ -10,8 +9,8 @@ import os
 from handle_url import *
 
 settings = {
-        "static_path": os.path.join(os.path.dirname(__file__), "static"),
-        }
+    "static_path": os.path.join(os.path.dirname(__file__), "static")
+}
 
 if __name__ == '__main__':
     app = tornado.web.Application([
@@ -19,8 +18,7 @@ if __name__ == '__main__':
         (r"/article*", ArticleHandler),
         (r"/collect*", CollectHandler),
         (r"/user*", UserHandler),
-        (r"/like*", LikeHandler),
-        ],
+        (r"/like*", LikeHandler)],
         **settings)
 
     app.listen(8080)
