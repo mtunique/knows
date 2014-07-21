@@ -21,7 +21,8 @@ class ListHandler(tornado.web.RequestHandler):
     def get(self):
         if self.request.arguments['time'][0] == '0':
             self.request.arguments['time'][0] = str(int(time.time()*10000))
-        self.write(get_article_list_as_json(self.request.arguments['user'][0], self.request.arguments['time'][0]))
+        self.write(get_article_list_as_json(self.request.arguments['user'][0],
+                                            self.request.arguments['time'][0]))
 
 
 class ArticleHandler(tornado.web.RequestHandler):
@@ -31,9 +32,11 @@ class ArticleHandler(tornado.web.RequestHandler):
 
 
 class CollectHandler(tornado.web.RequestHandler):
-    @handle_err
+    #@handle_err
     def get(self):
-        self.write(get_collect_list(self.request.arguments['uid'][0]))
+        if self.request.arguments['time'][0] == '0':
+            self.request.arguments['time'][0] = str(int(time.time()*10000))
+        self.write(json.dumps(get_collect_list(self.request.arguments['uid'][0], self.request.arguments['time'][0])))
 
 
 class LikeHandler(tornado.web.RequestHandler):
@@ -49,9 +52,9 @@ class LikeHandler(tornado.web.RequestHandler):
                 {'_id':   self.request.arguments['uid'][0]},
                 {tp: {'hash': self.request.arguments['hash'][0]}},
                 upsert=True)
-            self.write(1)
+            self.write('1')
         else:
-            self.write(0)
+            self.write('0')
 
 
 class UserHandler(tornado.web.RequestHandler):
