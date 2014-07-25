@@ -9,10 +9,11 @@ import knows_users as k_user
 
 def handle_err(func):
     def real(self):
-        try:
-            func(self)
-        except Exception as err:
-            print '参数错误  %s' % str(err.message)
+        # try:
+        #
+        # except Exception as err:
+        #     print '参数错误  %s' % str(err.message)
+        func(self)
     return real
 
 
