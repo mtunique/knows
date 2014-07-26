@@ -47,7 +47,7 @@ class LikeHandler(tornado.web.RequestHandler):
         if self.request.arguments['type'][0] == '1':
             tp = '$addToSet'
         elif self.request.arguments['type'][0] == '0':
-            tp = 'pull'
+            tp = '$pull'
         if tp:
             mongodb.db.like.update(
                 {'_id':   self.request.arguments['uid'][0]},
