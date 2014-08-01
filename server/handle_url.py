@@ -13,6 +13,7 @@ def handle_err(func):
         #
         # except Exception as err:
         #     print '参数错误  %s' % str(err.message)
+        #TODO write errors into logs
         func(self)
     return real
 
@@ -22,7 +23,7 @@ class ListHandler(tornado.web.RequestHandler):
     def get(self):
         if self.request.arguments['time'][0] == '0':
             self.request.arguments['time'][0] = str(int(time.time()*10000))
-        self.write(get_article_list_as_json(self.request.arguments['user'][0],
+        self.write(get_list_from_uid(self.request.arguments['user'][0],
                                             self.request.arguments['time'][0]))
 
 
@@ -80,6 +81,7 @@ class UserHandler(tornado.web.RequestHandler):
                     'merger_info':list(mongodb.db.merger_info.find({'way': self.request.arguments['way'][0],
                                                                     'uid': self.request.arguments['uid'][0]},
                                                                    {'_id': 0}))}))
+
     @handle_err
     def get(self):
         db_info = mongodb.db.merger_info.find_one({'way': self.request.arguments['way'][0],
@@ -101,3 +103,12 @@ class UserHandler(tornado.web.RequestHandler):
                     'merger_info':list(mongodb.db.merger_info.find({'way': self.request.arguments['way'][0],
                                                                     'uid': self.request.arguments['uid'][0]},
                                                                    {'_id': 0}))}))
+
+
+class TagHandler(tornado.web.RequestHandler):
+    @handle_err
+    def get(self):
+        if self.request.arguments['time'][0] == '0':
+            self.request.arguments['time'][0] = str(int(time.time()*10000))
+        self.write(get_list_from_tag(self.request.arguments['tag'][0],
+                                            self.request.arguments['time'][0]))
