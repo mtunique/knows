@@ -52,6 +52,9 @@ class IfanrDemoCrawler(CrawlSpider):
 
         item['content'] = sel.xpath('//div[@class="entry-content"]')[0].extract()
 
-        item['tag'] = 'news'
+        if 'app-special' in response.url:
+            item['tag'] = 'appanalyze'
+        else:
+            item['tag'] = 'news'
 
         return item
