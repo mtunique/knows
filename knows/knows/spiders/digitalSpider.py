@@ -29,7 +29,10 @@ class digitalSpider(CrawlSpider):
             new_url = url
             if judge_link(new_url):
                 continue
-            yield Request(new_url, callback=self.parse_article)
+            if 'yy.htm' in response.url:
+                yield Request(new_url, callback=self.parse_article, meta={'tag': 'appanalyze'})
+            else:
+                yield Request(new_url, callback=self.parse_article, meta={'tag': 'news'})
 
     def parse_article(self, response):
         sel = Selector(response)
@@ -56,9 +59,6 @@ class digitalSpider(CrawlSpider):
 
         item['content'] = real_content
 
-        if 'yy.htm' in response.url:
-            item['tag'] = 'appanalyze'
-        else:
-            item['tag'] = 'news'
+        item['tag'] = response.meta['tag']
 
         return item
