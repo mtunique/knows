@@ -22,7 +22,8 @@ class ApkbusDemoCrawler(CrawlSpider):
     def parse_start_url(self, response):
         slp = Selector(response)
 
-        for url in slp.xpath('//dl[@class="cl"]/dt/a/@href').extract():
+        #bug fixed: class cl is everywhere so use a specific id attr to find it
+        for url in slp.xpath('//div[@id="portal_block_711_content"]//dl[@class="cl"]/dt/a/@href').extract():
             new_url = url
             if judge_link(new_url):
                 continue
