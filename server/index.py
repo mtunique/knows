@@ -1,28 +1,28 @@
 __author__ = 'mt'
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
-import tornado.wsgi
-import tornado.ioloop
-import tornado.web
 import tornado.httpserver
-import wsgiref.simple_server
-import os
+import tornado.ioloop
+import tornado.options
+import tornado.web
+
+# from tornado.options import define, options
+# define("port", default=8080, help="run on the given port", type=int)
+
 
 from handle_url import *
 
-settings = {
-        "static_path": os.path.join(os.path.dirname(__file__), "static"),
-        }
 
-if __name__ == '__main__':
-    app = tornado.wsgi.WSGIApplication([
-        (r"/list/*", ListHandler),
+if __name__ == "__main__":
+    tornado.options.parse_command_line()
+    app = tornado.web.Application([
+        (r"/list*", ListHandler),
         (r"/article*", ArticleHandler),
         (r"/collect*", CollectHandler),
         (r"/user*", UserHandler),
         (r"/like*", LikeHandler),
-        ],
-        **settings)
-
-    server = wsgiref.simple_server.make_server('', 8080, app)
-    server.serve_forever()
+        (r"/tag*", TagHandler)
+    ]
+    )
+    http_server = tornado.httpserver.HTTPServer(app)
+    http_server.listen(8080)
+    tornado.ioloop.IOLoop.instance().start()

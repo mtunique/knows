@@ -72,7 +72,9 @@ class IteyesDemoCrawler(CrawlSpider):
         item['date'] = sel.xpath('//div[@class="blog_bottom"]//li[1]/text()')[0].extract().split(' ')[0]
         #date format:2014-05-08
         #Attention:This blog page date format may be like "10小时前"
-        #however, mistakes are rare
+        #this error occurs everytime cause we always scrape the latest news from the site,
+        # and all the latest news use this form of time, fuck them all this site we can use the time we scrape
+        # instead of the article time given
 
         item['fromsite'] = self.name+'_blog'
 

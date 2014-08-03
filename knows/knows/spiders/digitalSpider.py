@@ -29,7 +29,10 @@ class digitalSpider(CrawlSpider):
             new_url = url
             if judge_link(new_url):
                 continue
-            yield Request(new_url, callback=self.parse_article)
+            if 'yy.htm' in response.url:
+                yield Request(new_url, callback=self.parse_article, meta={'tag': 'appanalyze'})
+            else:
+                yield Request(new_url, callback=self.parse_article, meta={'tag': 'news'})
 
     def parse_article(self, response):
         sel = Selector(response)
@@ -50,11 +53,12 @@ class digitalSpider(CrawlSpider):
         item['link'] = response.url
 
         raw_content = sel.xpath('//div[@id="Cnt-Main-Article-QQ"]/p').extract()
+        real_content = ""
         for str in raw_content:
             real_content = str + real_content
 
         item['content'] = real_content
 
-        item['tag'] = 'news'
+        item['tag'] = response.meta['tag']
 
         return item

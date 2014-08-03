@@ -5,7 +5,8 @@ from scrapy.selector import Selector
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from knows.items import ArticleItem
-from baseFunctions import process_links
+from baseFunctions import judge_link
+from scrapy.http import Request
 import re
 
 
@@ -20,10 +21,22 @@ class OschinaDemoCrawler(CrawlSpider):
         'http://www.oschina.net/news'
     ]
 
-    rules = [
-        Rule(SgmlLinkExtractor(allow='/.+/blog/[0-9]+$',), callback='parse_article_blog', process_links=process_links),
-        Rule(SgmlLinkExtractor(allow='/news/[0-9]+/.+$',), callback='parse_article_news', process_links=process_links)
-    ]
+    def parse_start_url(self, response):
+        if response.url == 'http://www.oschina.net/blog':
+            slp = Selector(response)
+            for url in slp.xpath('//ul[@class="BlogList"]/li/div/h3/a/@href').extract():
+                new_url = url
+                if judge_link(new_url):
+                    continue
+                yield Request(new_url, callback=self.parse_article_blog)
+
+        if response.url == 'http://www.oschina.net/news':
+            slp = Selector(response)
+            for url in slp.xpath('//ul[@class="List"]/li/h2/a/@href').extract():
+                new_url = url
+                if judge_link(new_url):
+                    continue
+                yield Request(new_url, callback=self.parse_article_news)
 
     def parse_article_blog(self, response):
         sel = Selector(response)

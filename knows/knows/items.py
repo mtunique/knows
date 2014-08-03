@@ -12,3 +12,5 @@ class ArticleItem(Item):
     content = Field()
     #tags according to websites
     tag = Field()
+
+    img = Field()

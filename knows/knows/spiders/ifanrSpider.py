@@ -5,7 +5,8 @@ from scrapy.selector import Selector
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from knows.items import ArticleItem
-from baseFunctions import process_links
+from baseFunctions import judge_link
+from scrapy.http import Request
 
 
 class IfanrDemoCrawler(CrawlSpider):
@@ -15,12 +16,28 @@ class IfanrDemoCrawler(CrawlSpider):
     ]
 
     start_urls = [
-        'http://www.ifanr.com/',
+        'http://www.ifanr.com/category/special/smarthome',
+        'http://www.ifanr.com/category/special/opinion',
+        'http://www.ifanr.com/category/special/company',
+        'http://www.ifanr.com/category/special/device',
+        'http://www.ifanr.com/category/special/people',
+        'http://www.ifanr.com/category/special/health-special',
+        'http://www.ifanr.com/category/special/intelligentcar',
+        'http://www.ifanr.com/category/special/pattern',
+        'http://www.ifanr.com/category/special/app-special',
     ]
 
-    rules = [
-        Rule(SgmlLinkExtractor(allow='http://www.ifanr.com/[0-9]+$|/news/[0-9]+$',), callback='parse_article', process_links=process_links)
-    ]
+    def parse_start_url(self, response):
+        slp = Selector(response)
+
+        for url in slp.xpath('//h2[@class="entry-name yahei"]/a/@href').extract():
+            new_url = url
+            if judge_link(new_url):
+                continue
+            if 'app-special' in response.url:
+                yield Request(new_url, callback=self.parse_article, meta={'tag': 'appanalyze'})
+            else:
+                yield Request(new_url, callback=self.parse_article, meta={'tag': 'news'})
 
     def parse_article(self, response):
         sel = Selector(response)
@@ -38,6 +55,6 @@ class IfanrDemoCrawler(CrawlSpider):
 
         item['content'] = sel.xpath('//div[@class="entry-content"]')[0].extract()
 
-        item['tag'] = 'news'
+        item['tag'] = response.meta['tag']
 
         return item

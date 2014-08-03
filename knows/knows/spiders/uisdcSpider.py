@@ -21,7 +21,7 @@ class uisdcSpider(CrawlSpider):
     def parse_start_url(self, response):
         slp = Selector(response)
 
-        for url in slp.xpath('//div[@class="hfeed"]/div/a[1]/@href').extract():
+        for url in slp.xpath('//div[@class="hfeed index-feed"]/div/a[1]/@href').extract():
             new_url = url
             if judge_link(new_url):
                 continue
@@ -43,10 +43,11 @@ class uisdcSpider(CrawlSpider):
         item['link'] = response.url
 
         raw_content = sel.xpath('//div[@class="entry-content"]/*[position()<(last()-3)]').extract()
+        real_content = ''
         for line in raw_content:
             real_content = real_content + line
         item['content'] = real_content
 
-        item['tag'] = 'Design'
+        item['tag'] = 'uidesign'
 
         return item

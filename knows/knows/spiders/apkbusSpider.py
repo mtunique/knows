@@ -5,7 +5,8 @@ from scrapy.selector import Selector
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from knows.items import ArticleItem
-from baseFunctions import process_links
+from baseFunctions import judge_link
+from scrapy.http import Request
 
 
 class ApkbusDemoCrawler(CrawlSpider):
@@ -18,9 +19,15 @@ class ApkbusDemoCrawler(CrawlSpider):
         'http://www.apkbus.com',
     ]
 
-    rules = [
-        Rule(SgmlLinkExtractor(allow='android-[0-9]+-1\.html$',), callback='parse_article', process_links=process_links)
-    ]
+    def parse_start_url(self, response):
+        slp = Selector(response)
+
+        #bug fixed: class cl is everywhere so use a specific id attr to find it
+        for url in slp.xpath('//div[@id="portal_block_711_content"]//dl[@class="cl"]/dt/a/@href').extract():
+            new_url = url
+            if judge_link(new_url):
+                continue
+            yield Request(new_url, callback=self.parse_article)
 
     def parse_article(self, response):
         sel = Selector(response)

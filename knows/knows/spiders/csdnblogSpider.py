@@ -5,8 +5,8 @@ from scrapy.selector import Selector
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from knows.items import ArticleItem
-from baseFunctions import process_links
-
+from baseFunctions import judge_link
+from scrapy.http import Request
 
 class CsdnDemoCrawler(CrawlSpider):
     name = "csdn_blog"
@@ -37,9 +37,14 @@ class CsdnDemoCrawler(CrawlSpider):
         'http://blog.csdn.net/other/newest.html',
     ]
 
-    rules = [
-        Rule(SgmlLinkExtractor(allow='/.+/article/details/[0-9]{8}',), callback='parse_article', process_links=process_links)
-    ]
+    def parse_start_url(self, response):
+        slp = Selector(response)
+
+        for url in slp.xpath('//div[@class="blog_list"]/h1/a[@name]/@href').extract():
+            new_url = url
+            if judge_link(new_url):
+                continue
+            yield Request(new_url, callback=self.parse_article)
 
     def parse_article(self, response):
         sel = Selector(response)
