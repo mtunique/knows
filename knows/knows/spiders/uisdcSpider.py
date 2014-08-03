@@ -48,6 +48,6 @@ class uisdcSpider(CrawlSpider):
             real_content = real_content + line
         item['content'] = real_content
 
-        item['tag'] = 'Design'
+        item['tag'] = 'uidesign'
 
         return item
