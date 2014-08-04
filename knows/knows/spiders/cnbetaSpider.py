@@ -6,11 +6,11 @@ from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.selector import Selector
 from knows.items import ArticleItem
-from scrapy.spider import BaseSpider
+from scrapy.spider import Spider
 from baseFunctions import judge_link
 
 
-class cnBetaSpider(BaseSpider):
+class cnBetaSpider(CrawlSpider):
     name = "cnbeta"
     allowed_domains = ["cnbeta.com"]
     start_urls = [
