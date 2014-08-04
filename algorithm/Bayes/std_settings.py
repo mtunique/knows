@@ -12,8 +12,8 @@ CLASSES_SET = {
 }
 
 # vector of source and trained
-vector_filepath = 'source_text/tags_real.txt'
-tgt_vector_filepath = 'source_text/trained_vector.json'
+vector_filepath = 'Bayes/source_text/tags_real.txt'
+tgt_vector_filepath = 'Bayes/source_text/trained_vector.json'
 
 
 # ============== DEBUG ONLY =================

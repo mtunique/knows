@@ -179,7 +179,7 @@ class NaiveBayesClassifier():
 
 if __name__ == '__main__':
     bayes = NaiveBayesClassifier()
-    bayes.load_from_file()
+    bayes.load_from_file('source_text/trained_vector.json')
     from dbs.mongodb import db
     time = 0
     for i in db.s_content.find({}):
