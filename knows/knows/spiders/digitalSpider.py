@@ -52,12 +52,7 @@ class digitalSpider(CrawlSpider):
 
         item['link'] = response.url
 
-        raw_content = sel.xpath('//div[@id="Cnt-Main-Article-QQ"]/p').extract()
-        real_content = ""
-        for str in raw_content:
-            real_content = str + real_content
-
-        item['content'] = real_content
+        item['content'] = sel.xpath('//div[@id="Cnt-Main-Article-QQ"]').extract()[0]
 
         item['tag'] = response.meta['tag']
 
