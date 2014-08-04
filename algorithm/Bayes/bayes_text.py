@@ -181,11 +181,34 @@ if __name__ == '__main__':
     bayes = NaiveBayesClassifier()
     bayes.load_from_file('source_text/trained_vector.json')
     from dbs.mongodb import db
-    time = 0
-    for i in db.s_content.find({}):
-        print i['_id']
-        tmp = bayes.bayes_classify(i['s'].encode('utf-8'))
+    from bs4 import BeautifulSoup
+
+    def to_string(content, strip=True):
+        return BeautifulSoup(content).html.body.get_text('\n', strip=strip)
+
+    for i in db.article.find({'tag': {'$nin': ['cloud', 'develop', 'prolang', 'systemsecure', 'pm',
+                                                     'hardware', 'news', 'viewdesign,', 'uidesign', 'appanalyze']}}):
+        s_content = db.s_content.find_one({'_id': i['_id']})
+        try:
+            s_content = s_content['s']
+        except Exception:
+            s = to_string(db.content.find_one({'_id': i['_id']})['content'])
+            db.s_content.update({'_id': i['_id']}, {'$set': {'s': s}}, upsert=True)
+            s_content = s
+        print 'pre tag', i['_id']
+        try:
+            print i['tag']
+            print type(i['tag'])
+            print len(i['tag'])
+            print i['tag'] in ['cloud', 'develop', 'prolang', 'systemsecure', 'pm',
+                                                     'hardware', 'news', 'viewdesign,', 'uidesign', 'appanalyze']
+        except KeyError:
+            pass
+
+        tmp = bayes.bayes_classify(s_content.encode('utf-8'))
         print tmp
+        print type(tmp)
         db.article.update({'_id': i['_id']},
                                   {'$set': {'tag': tmp}},
-                                  upsert=True)
+                                  )
+        print 'now tag', db.article.find_one({'_id': i['_id']})['tag'],'\n'

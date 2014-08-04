@@ -12,9 +12,12 @@ def ids_list_to_article_list(ids, time, limit=15):
 
 def get_content(data):
     try:
-        return '<!DOCTYPE html><html><head><link rel="stylesheet" href="mystyle.css"><meta ' \
-                              'charset="utf-8"><script src="file:///android_asset/my.js"></script' \
-                              '></head><body><div class="article_content">%s</div></body></html>' % db.content.find_one({'_id': data})['content']
+        return '<!DOCTYPE html><html><head><link rel="stylesheet" ' \
+            'href="file:///android_asset/mystyle.css"><meta ' \
+            'charset="utf-8"><script src="file:///android_asset/my.js"></script' \
+            '></head><body><div class="article_content" id="article_content">%s</div>' \
+            '<script type="text/javascript" src="file:///android_asset/myscript.js">' \
+            '</script></body></html>' % db.content.find_one({'_id': data})['content']
     except Exception as err:
         #TODO now it is duty
         return '无法获取文章'+str(err)
