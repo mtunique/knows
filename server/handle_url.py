@@ -30,7 +30,7 @@ class ListHandler(tornado.web.RequestHandler):
 class ArticleHandler(tornado.web.RequestHandler):
     @handle_err
     def get(self):
-        self.write(get_content_as_json(self.request.arguments['hash'][0]))
+        self.write(get_content(self.request.arguments['hash'][0]))
 
 
 class CollectHandler(tornado.web.RequestHandler):

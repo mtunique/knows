@@ -10,9 +10,11 @@ def ids_list_to_article_list(ids, time, limit=15):
                 .sort("time", DESCENDING).limit(limit))
 
 
-def get_content_as_json(data):
+def get_content(data):
     try:
-        return db.content.find_one({'_id': data})['content']
+        return '<!DOCTYPE html><html><head><link rel="stylesheet" href="mystyle.css"><meta ' \
+                              'charset="utf-8"><script src="file:///android_asset/my.js"></script' \
+                              '></head><body><div class="article_content">%s</div></body></html>' % db.content.find_one({'_id': data})['content']
     except Exception as err:
         #TODO now it is duty
         return '无法获取文章'+str(err)
