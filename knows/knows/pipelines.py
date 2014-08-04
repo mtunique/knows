@@ -35,9 +35,12 @@ class ArticleInsertPipeline(object):
                 pass
 
         # link css href need to be reset according to the android device
-        tmp_item['content'] = '<!DOCTYPE html><html><head><link rel="stylesheet" href="mystyle.css"><meta ' \
+        tmp_item['content'] = '<!DOCTYPE html><html><head><link rel="stylesheet" ' \
+                              'href="file:///android_asset/mystyle.css"><meta ' \
                               'charset="utf-8"><script src="file:///android_asset/my.js"></script' \
-                              '></head><body><div class="article_content">%s</div></body></html>' % tmp_item['content']
+                              '></head><body><div class="article_content" id="article_content">%s</div>' \
+                              '<script type="text/javascript" src="file:///android_asset/myscript.js">' \
+                              '</script></body></html>' % tmp_item['content']
 
         #insert article information & content into db
         mongodb.db.content.update({'_id': tmp_item['_id']},
