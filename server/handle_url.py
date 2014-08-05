@@ -34,7 +34,7 @@ class ArticleHandler(tornado.web.RequestHandler):
 
 
 class CollectHandler(tornado.web.RequestHandler):
-    #@handle_err
+    @handle_err
     def get(self):
         if self.request.arguments['time'][0] == '0':
             self.request.arguments['time'][0] = str(int(time.time()*10000))
@@ -61,7 +61,7 @@ class LikeHandler(tornado.web.RequestHandler):
 
 class UserHandler(tornado.web.RequestHandler):
     @handle_err
-    def post(self):
+    def get(self):
         db_info = mongodb.db.merger_info.find_one({'way': self.request.arguments['way'][0],
                                                   'uid': self.request.arguments['uid'][0]})
         if db_info:
@@ -78,31 +78,12 @@ class UserHandler(tornado.web.RequestHandler):
                                       {'$set': info},
                                       upsert=True)
         self.write(json.dumps({'_id': main_id,
-                    'merger_info':list(mongodb.db.merger_info.find({'way': self.request.arguments['way'][0],
-                                                                    'uid': self.request.arguments['uid'][0]},
-                                                                   {'_id': 0}))}))
+                               'merger_info': list(mongodb.db.merger_info.find({'way': self.request.arguments['way'][0],
+                               'uid': self.request.arguments['uid'][0]}, {'_id': 0}))}))
 
     @handle_err
-    def get(self):
-        db_info = mongodb.db.merger_info.find_one({'way': self.request.arguments['way'][0],
-                                                  'uid': self.request.arguments['uid'][0]})
-        if db_info:
-            main_id = db_info['main_id']
-        else:
-            main_id = k_user.create_id(self.request.arguments['way'][0]+self.request.arguments['uid'][0])
-        info = {'way': self.request.arguments['way'][0],
-                'uid': self.request.arguments['uid'][0],
-                'name': self.request.arguments['name'][0],
-                'token': self.request.arguments['token'][0],
-                'main_id': main_id}
-        mongodb.db.merger_info.update({'way': self.request.arguments['way'][0],
-                                       'uid': self.request.arguments['uid'][0]},
-                                      {'$set': info},
-                                      upsert=True)
-        self.write(json.dumps({'_id':main_id,
-                    'merger_info':list(mongodb.db.merger_info.find({'way': self.request.arguments['way'][0],
-                                                                    'uid': self.request.arguments['uid'][0]},
-                                                                   {'_id': 0}))}))
+    def post(self):
+        self.get(self)
 
 
 class TagHandler(tornado.web.RequestHandler):
@@ -110,5 +91,16 @@ class TagHandler(tornado.web.RequestHandler):
     def get(self):
         if self.request.arguments['time'][0] == '0':
             self.request.arguments['time'][0] = str(int(time.time()*10000))
-        self.write(get_list_from_tag(self.request.arguments['tag'][0],
-                                            self.request.arguments['time'][0]))
+        self.write(get_list_from_tag(self.request.arguments['tag'][0], self.request.arguments['time'][0]))
+
+
+class DelHandler(tornado.web.RequestHandler):
+    @handle_err
+    def get(self):
+        pass
+
+
+class VerHandler(tornado.web.RequestHandler):
+    @handle_err
+    def get(self):
+        self.write("{'version_code':1,'version':'1.0','address':'http://knows.mtunique.com/knows.apk'}")
