@@ -45,7 +45,7 @@ class OnlineLDA:
         self._vocab = dict()
         for word in vocab:
             word = word.lower()
-            word = re.sub(r'[^a-z]', '', word)
+            #word = re.sub(r'[^a-z]', '', word)
             self._vocab[word] = len(self._vocab)
 
         self._K = K
