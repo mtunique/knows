@@ -187,7 +187,7 @@ if __name__ == '__main__':
         return BeautifulSoup(content).html.body.get_text('\n', strip=strip)
 
     for i in db.article.find({'tag': {'$nin': ['cloud', 'develop', 'prolang', 'systemsecure', 'pm',
-                                                     'hardware', 'news', 'viewdesign,', 'uidesign', 'appanalyze']}}):
+                                                     'hardware', 'news', 'viewdesign', 'uidesign', 'appanalyze']}}):
         s_content = db.s_content.find_one({'_id': i['_id']})
         try:
             s_content = s_content['s']
