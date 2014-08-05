@@ -4,6 +4,11 @@ import math
 from counts import *
 import jieba
 import jieba.analyse
+from bs4 import BeautifulSoup
+
+
+def to_string(content, strip=True):
+    return BeautifulSoup(content).html.body.get_text('\n', strip=strip)
 
 
 def _cos(x, y):
@@ -83,9 +88,7 @@ def doc_to_vector(doc, vocab):
     return ans
 
 if __name__ == '__main__':
-    # vocab = [i[:-1] for i in file('./dict_nostops.txt').readlines()]
-    # _vocab = dict()
-    # for word in vocab:
-    #     _vocab[word] = len(_vocab)
-    # print doc_to_vector('code', _vocab)
+    vocab = [i[:-1] for i in file('./dict_nostops.txt').readlines()]
+    _vocab = dict()
+
     pass

@@ -3,13 +3,11 @@ __author__ = 'mt'
 import sys
 from dbs import redisdb
 from dbs import mongodb
-from bs4 import BeautifulSoup
+from std_functions import to_string
 from std_functions import doc_to_vector
 from Bayes import bayes_text
 
 
-def to_string(content, strip=True):
-    return BeautifulSoup(content).html.body.get_text('\n', strip=strip)
 
 
 def main():
