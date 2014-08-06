@@ -46,7 +46,7 @@ def get_list_from_tag(tag, time, limit=15):
     except Exception as err:
         #TODO send errors to logs
         print err.message
-        return json.dumps(article_list)
+    return json.dumps(article_list)
 
 if __name__ == '__main__':
     pass
