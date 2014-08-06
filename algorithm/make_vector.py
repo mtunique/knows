@@ -5,6 +5,7 @@ import numpy, sys
 from dbs import mongodb
 from pymongo import DESCENDING
 import online_ldavb
+from std_functions import to_string
 
 
 def main():
@@ -41,8 +42,9 @@ def main():
         for a in l:
             try:
                 doc_set.append(mongodb.db.s_content.find_one({"_id": a['_id']})['s'])
-            except Exception as err:
-                print a, err.args
+            except Exception:
+                mongodb.db.s_content.update({'_id': a['_id']},
+                                            {'$set': {'s': to_string(mongodb.db.content.find_one({'_id': a['_id']})['content'])}}, upsert=True)
 
         if not doc_set:
             break
