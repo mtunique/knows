@@ -10,7 +10,7 @@ from std_functions import to_string
 
 def main():
     # The number of documents to analyze each iteration
-    batch_size = 64
+    batch_size = 200
     # The total number of documents in mongodb
     D = mongodb.db.s_content.count()
     # The number of topics
@@ -43,8 +43,10 @@ def main():
             try:
                 doc_set.append(mongodb.db.s_content.find_one({"_id": a['_id']})['s'])
             except Exception:
+                s = to_string(mongodb.db.content.find_one({'_id': a['_id']})['content'])
                 mongodb.db.s_content.update({'_id': a['_id']},
-                                            {'$set': {'s': to_string(mongodb.db.content.find_one({'_id': a['_id']})['content'])}}, upsert=True)
+                                            {'$set': {'s': s}}, upsert=True)
+                doc_set.append(s)
 
         if not doc_set:
             break

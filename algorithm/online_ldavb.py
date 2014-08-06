@@ -84,7 +84,7 @@ class OnlineLDA:
             docs = temp
 
         wordids, wordcts = parse_doc_list(docs, self._vocab)
-        for i in xrange(64-len(wordids)):
+        for i in xrange(200-len(wordids)):
             wordids = wordids + [[1]]
             wordcts = wordcts + [[1]]
         batchD = len(docs)
@@ -197,7 +197,7 @@ class OnlineLDA:
             docs = temp
 
         wordids, wordcts = parse_doc_list(docs, self._vocab)
-        for i in xrange(64-len(wordids)):
+        for i in xrange(200-len(wordids)):
             wordids = wordids + [[1]]
             wordcts = wordcts + [[1]]
 
