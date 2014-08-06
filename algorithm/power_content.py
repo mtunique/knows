@@ -8,8 +8,6 @@ from std_functions import doc_to_vector
 from Bayes import bayes_text
 
 
-
-
 def main():
     bs = bayes_text.NaiveBayesClassifier()
     bs.load_from_file()

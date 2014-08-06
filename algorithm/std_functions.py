@@ -90,5 +90,7 @@ def doc_to_vector(doc, vocab):
 if __name__ == '__main__':
     vocab = [i[:-1] for i in file('./dict_nostops.txt').readlines()]
     _vocab = dict()
-
+    for word in vocab:
+        _vocab[word] = len(_vocab)
+    doc_to_vector('code', _vocab)
     pass
