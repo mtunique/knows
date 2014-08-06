@@ -35,7 +35,9 @@ class ArticleInsertPipeline(object):
                 pass
 
         redisdb.db.lpush('content', tmp_item['_id'])
-
+        mongodb.db.content.update({'_id': tmp_item['_id']},
+                                  {'$set': {'content': tmp_item['content']}},
+                                  upsert=True)
         tmp_item.pop('content')
         mongodb.db.article.insert(tmp_item)
         #return item
