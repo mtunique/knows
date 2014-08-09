@@ -34,9 +34,9 @@ def main():
             mongodb.db.s_content.update({'_id': content_hash}, {'$set': {'s': s, 'time': time}}, upsert=True)
 
             #TODO make article vector
-            #print doc_to_vector(s, _vocab)
+            print doc_to_vector(s, _vocab)
 
-            #mongodb.db.v_content.update({'_id': content_hash}, {'$set': {'v': doc_to_vector(s, _vocab)}}, upsert=True)
+            mongodb.db.v_content.update({'_id': content_hash}, {'$set': {'v': doc_to_vector(s, _vocab)}}, upsert=True)
 
             redisdb.db.lpush('s_content', content_hash)
         except Exception as err:
