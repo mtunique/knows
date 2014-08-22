@@ -31,7 +31,7 @@ class ArticleInsertPipeline(object):
                                   {'$set': {'content': tmp_item['content']}},
                                   upsert=True)
         tmp_item.pop('content')
-        mongodb.db.article.insert(tmp_item)
+        mongodb.db.article.update({'_id': tmp_item['_id']}, tmp_item, upsert=True)
         #return item
 
 if __name__ == '__main__':
