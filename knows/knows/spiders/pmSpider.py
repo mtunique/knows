@@ -27,7 +27,7 @@ class pmSpider(CrawlSpider):
     def parse_start_url(self, response):
         slp = Selector(response)
 
-        for url in slp.xpath('//div[@class="content_box bor_cor"]//div[@class="f_img_box"]/a/@href'):
+        for url in slp.xpath('//div[@class="content_box bor_cor"]//div[@class="f_img_box"]/a/@href').extract():
             new_url = url
             if judge_link(new_url):
                 continue
