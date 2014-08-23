@@ -41,6 +41,7 @@ def main():
             redisdb.db.lpush('s_content', content_hash)
         except Exception as err:
             print '[%s]:%s' % (content_hash, str(err.message))
+            redisdb.db.lpush('power_error_content', content_hash)
         #print 3
         #break
 
