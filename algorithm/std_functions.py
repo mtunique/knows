@@ -87,10 +87,21 @@ def doc_to_vector(doc, vocab):
             ans.append(0.)
     return ans
 
+
+def get_base_vectors(db=None):
+    if not db:
+        from dbs.mongodb import db
+    #return [db.vector.find_one({'_id': str(i)})['v'] for i in range(20)]
+    for i in range(20):
+        print db.vector.find_one({'_id': str(i)})['v']
+
+
+def vector_to_topic_vector(vector, base_vector):
+    return [cos(vector, base_vector[i]) for i in range(20)]
+
+
 if __name__ == '__main__':
-    vocab = [i[:-1] for i in file('./dict_nostops.txt').readlines()]
-    _vocab = dict()
-    for word in vocab:
-        _vocab[word] = len(_vocab)
-    doc_to_vector('code', _vocab)
-    pass
+    import time
+    pre_time = time.time()
+    print get_base_vectors()
+    print time.time() - pre_time
