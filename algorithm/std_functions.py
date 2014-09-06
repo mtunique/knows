@@ -59,15 +59,9 @@ def parse_doc_list(docs, vocab):
                     ddict[wordtoken] = 0
                 ddict[wordtoken] += 1
 
-        if len(ddict.keys()):
-            wordids.append([i-1 for i in ddict.keys()])
-        # else:
-        #     wordids.append([1])
 
-        if len(ddict.values()):
-            wordcts.append(ddict.values())
-        # else:
-        #     wordids.append([1])
+        wordids.append([i-1 for i in ddict.keys()])
+        wordcts.append(ddict.values())
 
     return wordids, wordcts
 
