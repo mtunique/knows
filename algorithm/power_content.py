@@ -34,10 +34,9 @@ def main():
             mongodb.db.s_content.update({'_id': content_hash}, {'$set': {'s': s, 'time': time}}, upsert=True)
 
             #print doc_to_vector(s, _vocab)
-            v = doc_to_vector(s, _vocab)
+            t = vector_to_topic_vector(doc_to_vector(s, _vocab), base_vectors)
             mongodb.db.v_content.update({'_id': content_hash},
-                                        {'$set': {'v': v,
-                                                  't': vector_to_topic_vector(v, base_vectors)}},
+                                        {'$set': {'t': t}},
                                         upsert=True)
 
             redisdb.db.lpush('s_content', content_hash)
