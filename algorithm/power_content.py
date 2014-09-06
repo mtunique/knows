@@ -1,15 +1,15 @@
 __author__ = 'mt'
 # -*- coding: utf-8 -*-
 import sys
-from dbs import redisdb
-from dbs import mongodb
-from std_functions import to_string
-from std_functions import doc_to_vector
+import traceback
+from dbs import redisdb, mongodb
+from std_functions import to_string, doc_to_vector, vector_to_topic_vector, get_base_vectors
 from Bayes import bayes_text
 
 
 def main():
     bs = bayes_text.NaiveBayesClassifier()
+    base_vectors = get_base_vectors(mongodb.db)
     bs.load_from_file()
     vocab = [i[:-1] for i in file('./dict_nostops.txt').readlines()]
     _vocab = dict()
@@ -33,14 +33,17 @@ def main():
             time = mongodb.db.article.find_one({'_id': content_hash})['time']
             mongodb.db.s_content.update({'_id': content_hash}, {'$set': {'s': s, 'time': time}}, upsert=True)
 
-            #TODO make article vector
             #print doc_to_vector(s, _vocab)
-
-            mongodb.db.v_content.update({'_id': content_hash}, {'$set': {'v': doc_to_vector(s, _vocab)}}, upsert=True)
+            v = doc_to_vector(s, _vocab)
+            mongodb.db.v_content.update({'_id': content_hash},
+                                        {'$set': {'v': v,
+                                                  't': vector_to_topic_vector(v, base_vectors)}},
+                                        upsert=True)
 
             redisdb.db.lpush('s_content', content_hash)
         except Exception as err:
             print '[%s]:%s' % (content_hash, str(err.message))
+            traceback.print_exc()
             redisdb.db.lpush('power_error_content', content_hash)
         #print 3
         #break
