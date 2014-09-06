@@ -26,12 +26,12 @@ class ArticleInsertPipeline(object):
         tmp_item.setdefault('time', str(int(time.time()*10000)))
         #time.sleep(0.001)
 
-        redisdb.db.lpush('content', tmp_item['_id'])
         mongodb.db.content.update({'_id': tmp_item['_id']},
                                   {'$set': {'content': tmp_item['content']}},
                                   upsert=True)
         tmp_item.pop('content')
         mongodb.db.article.update({'_id': tmp_item['_id']}, tmp_item, upsert=True)
+        redisdb.db.lpush('content', tmp_item['_id'])
         #return item
 
 if __name__ == '__main__':
