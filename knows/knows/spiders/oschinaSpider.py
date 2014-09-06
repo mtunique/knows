@@ -25,18 +25,20 @@ class OschinaDemoCrawler(CrawlSpider):
         if response.url == 'http://www.oschina.net/blog':
             slp = Selector(response)
             for url in slp.xpath('//ul[@class="BlogList"]/li/div/h3/a/@href').extract():
-                new_url = url
-                if judge_link(new_url):
+                if not url.startswith('http'):
+                    url = 'http://www.oschina.net/blog%s' % url
+                if judge_link(url):
                     continue
-                yield Request(new_url, callback=self.parse_article_blog)
+                yield Request(url, callback=self.parse_article_blog)
 
         if response.url == 'http://www.oschina.net/news':
             slp = Selector(response)
             for url in slp.xpath('//ul[@class="List"]/li/h2/a/@href').extract():
-                new_url = url
-                if judge_link(new_url):
+                if not url.startswith('http'):
+                    url = 'http://www.oschina.net/news%s' % url
+                if judge_link(url):
                     continue
-                yield Request(new_url, callback=self.parse_article_news)
+                yield Request(url, callback=self.parse_article_news)
 
     def parse_article_blog(self, response):
         sel = Selector(response)
