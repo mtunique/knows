@@ -4,18 +4,20 @@ import sys
 import threading
 import time
 import subprocess
+import traceback
 from settings import SPIDER_INTERVAL as sp
 
 
 def exec_spider(name, interval):
     while True:
+        time.sleep(interval)
         try:
             script = 'cd ../knows/knows/\nscrapy crawl %s' % name
             output = subprocess.check_output(script, shell=True, stderr=subprocess.STDOUT)
             print output
         except subprocess.CalledProcessError as err:
             print err
-        time.sleep(interval)
+            traceback.print_exc()
 
 
 def main():
