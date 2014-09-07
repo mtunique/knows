@@ -23,6 +23,7 @@ if __name__ == "__main__":
         (r"/tag*", TagHandler),
         (r"/del*", DelHandler),
         (r"/version", VerHandler),
+        (r"/first_info", FirstInfoHandler),
     ]
     )
     http_server = tornado.httpserver.HTTPServer(app)

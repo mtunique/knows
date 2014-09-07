@@ -1,10 +1,12 @@
 __author__ = 'mt'
 # -*- coding: utf-8 -*-
+import time
 import tornado.web
 from get_data import *
-import time
 from handle_user import *
 import knows_users as k_user
+
+TAG_VECTOR = mongodb.db.tag_vector.find_one({})
 
 
 def handle_err(func):
@@ -18,13 +20,20 @@ def handle_err(func):
     return real
 
 
+def type_json(func):
+    def real(self):
+        self.set_header('Content-Type', 'application/json')
+        func(self)
+    return real
+
+
 class ListHandler(tornado.web.RequestHandler):
     @handle_err
+    @type_json
     def get(self):
         if self.request.arguments['time'][0] == '0':
             self.request.arguments['time'][0] = str(int(time.time()*10000))
-        self.write(get_list_from_uid(self.request.arguments['user'][0],
-                                            self.request.arguments['time'][0]))
+        self.write(json.dumps(get_list_from_uid(self.request.arguments['user'][0], self.request.arguments['time'][0])))
 
 
 class ArticleHandler(tornado.web.RequestHandler):
@@ -35,10 +44,12 @@ class ArticleHandler(tornado.web.RequestHandler):
 
 class CollectHandler(tornado.web.RequestHandler):
     @handle_err
+    @type_json
     def get(self):
         if self.request.arguments['time'][0] == '0':
             self.request.arguments['time'][0] = str(int(time.time()*10000))
-        self.write(json.dumps(get_collect_list(self.request.arguments['uid'][0], self.request.arguments['time'][0])))
+            self.write(json.dumps(get_collect_list(self.request.arguments['uid'][0],
+                                                   self.request.arguments['time'][0])))
 
 
 class LikeHandler(tornado.web.RequestHandler):
@@ -61,18 +72,22 @@ class LikeHandler(tornado.web.RequestHandler):
 
 class UserHandler(tornado.web.RequestHandler):
     @handle_err
+    @type_json
     def get(self):
         db_info = mongodb.db.merger_info.find_one({'way': self.request.arguments['way'][0],
-                                                  'uid': self.request.arguments['uid'][0]})
+                                                   'uid': self.request.arguments['uid'][0]})
         if db_info:
             main_id = db_info['main_id']
         else:
             main_id = k_user.create_id(self.request.arguments['way'][0]+self.request.arguments['uid'][0])
+
         info = {'way': self.request.arguments['way'][0],
                 'uid': self.request.arguments['uid'][0],
                 'name': self.request.arguments['name'][0],
                 'token': self.request.arguments['token'][0],
-                'main_id': main_id}
+                'main_id': main_id,
+                'vector': [0] * 20}
+
         mongodb.db.merger_info.update({'way': self.request.arguments['way'][0],
                                        'uid': self.request.arguments['uid'][0]},
                                       {'$set': info},
@@ -88,6 +103,7 @@ class UserHandler(tornado.web.RequestHandler):
 
 class TagHandler(tornado.web.RequestHandler):
     @handle_err
+    @type_json
     def get(self):
         if self.request.arguments['time'][0] == '0':
             self.request.arguments['time'][0] = str(int(time.time()*10000))
@@ -98,6 +114,25 @@ class DelHandler(tornado.web.RequestHandler):
     @handle_err
     def get(self):
         pass
+
+
+class FirstInfoHandler(tornado.web.RequestHandler):
+    @handle_err
+    @type_json
+    def post(self):
+        info = json.loads(self.request.body)
+
+        data = mongodb.db.merger_info.find_one({'main_id': info['uid']})
+        vector = data['vector']
+
+        global TAG_VECTOR
+        for tag in info['what']:
+            if tag in TAG_VECTOR:
+                vector = [vector[i] + TAG_VECTOR[tag][i] for i in range(20)]
+
+        mongodb.db.merger_info.update({'_id': data['_id']}, {'$set': {'vector': vector}}, upsert=True)
+
+        self.write('1')
 
 
 class VerHandler(tornado.web.RequestHandler):
