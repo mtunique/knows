@@ -24,7 +24,7 @@ def main():
             s = to_string(content_html)
             #print s
             #print article
-            if article['tag'] not in ['viewdesign', 'uidesign', 'appanalyze']:
+            if 'tag' not in article or article['tag'] not in ['viewdesign', 'uidesign', 'appanalyze']:
                 tag = bs.bayes_classify(s)
                 #print tag
                 mongodb.db.article.update({'_id': content_hash}, {'$set': {'tag': tag}}, upsert=True)
