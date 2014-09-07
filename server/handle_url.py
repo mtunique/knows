@@ -1,12 +1,17 @@
 __author__ = 'mt'
 # -*- coding: utf-8 -*-
 import time
+import sys
+import os
 import tornado.web
 from get_data import *
 from handle_user import *
 import knows_users as k_user
 
-TAG_VECTOR = mongodb.db.tag_vector.find_one({})
+sys.path.append(os.path.join(os.path.abspath('..'), 'algorithm'))
+from std_functions import cos
+
+TAG_VECTOR = mongodb.db2.tag_vector.find_one({}, {'_id': 0})
 
 
 def handle_err(func):
@@ -126,11 +131,19 @@ class FirstInfoHandler(tornado.web.RequestHandler):
         vector = data['vector']
 
         global TAG_VECTOR
+        TAG_VECTOR = dict(TAG_VECTOR)
+
         for tag in info['what']:
             if tag in TAG_VECTOR:
                 vector = [vector[i] + TAG_VECTOR[tag][i] for i in range(20)]
+        vector = [vector[i] / len(info['what']) for i in range(20)]
 
-        mongodb.db.merger_info.update({'_id': data['_id']}, {'$set': {'vector': vector}}, upsert=True)
+        tot_cos = 0.
+        for tag_vec in TAG_VECTOR.values():
+            tot_cos += cos(vector, tag_vec)
+
+        mongodb.db.merger_info.update({'_id': data['_id']},
+                                      {'$set': {'vector': vector, 'thr': tot_cos / len(TAG_VECTOR)}}, upsert=True)
 
         self.write('1')
 
