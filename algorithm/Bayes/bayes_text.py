@@ -187,7 +187,7 @@ if __name__ == '__main__':
         return BeautifulSoup(content).html.body.get_text('\n', strip=strip)
 
     for i in db.article.find({'tag': {'$nin': ['cloud', 'develop', 'prolang', 'systemsecure', 'pm',
-                                                     'hardware', 'news', 'viewdesign', 'uidesign', 'appanalyze']}}):
+                                               'hardware', 'news', 'viewdesign', 'uidesign', 'appanalyze']}}):
         s_content = db.s_content.find_one({'_id': i['_id']})
         try:
             s_content = s_content['s']
@@ -201,7 +201,7 @@ if __name__ == '__main__':
             print type(i['tag'])
             print len(i['tag'])
             print i['tag'] in ['cloud', 'develop', 'prolang', 'systemsecure', 'pm',
-                                                     'hardware', 'news', 'viewdesign,', 'uidesign', 'appanalyze']
+                               'hardware', 'news', 'viewdesign,', 'uidesign', 'appanalyze']
         except KeyError:
             pass
 
@@ -209,6 +209,5 @@ if __name__ == '__main__':
         print tmp
         print type(tmp)
         db.article.update({'_id': i['_id']},
-                                  {'$set': {'tag': tmp}},
-                                  )
+                          {'$set': {'tag': tmp}})
         print 'now tag', db.article.find_one({'_id': i['_id']})['tag'],'\n'
