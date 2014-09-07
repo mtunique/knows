@@ -33,6 +33,10 @@ def update_users():
 
 
 if __name__ == '__main__':
+    import sys
+    outfile = open('recommend.log', 'w')
+    sys.stderr = outfile
+    sys.stdout = outfile
     users = []
     thread = threading.Thread(target=update_users)
     main()
