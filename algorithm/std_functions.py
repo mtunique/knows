@@ -13,10 +13,13 @@ def to_string(content, strip=True):
 
 def _cos(x, y):
     ans = 0.
+    len_x = 0
+    len_y = 0
     for i in range(len(x)):
         ans += x[i] * y[i]
-    ans = math.sqrt(ans)
-    return ans
+        len_x += x[i] ** 2
+        len_y += y[i] ** 2
+    return math.sqrt(math.fabs(ans)) / math.sqrt(len_x) / math.sqrt(len_y)
 
 
 def cos(x, y):
@@ -93,7 +96,4 @@ def vector_to_topic_vector(vector, base_vector):
 
 
 if __name__ == '__main__':
-    import time
-    pre_time = time.time()
-    print get_base_vectors()
-    print time.time() - pre_time
+    print cos([0.1, -0.1], [1.1, -0.9])
