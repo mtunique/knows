@@ -10,14 +10,17 @@ TAGS = ['cloud', 'develop', 'prolang', 'systemsecure', 'pm',
 
 def main():
     global users
+    import random
     while True:
         tmp, content_hash = redisdb.db.brpop('s_content')
         try:
             data = mongodb.db.v_content.find_one({'_id': content_hash}, {'t': 1})
+
             for user in users:
-                if user['thr'] > cos(data['t'], user['vector']):
+                if user['thr'] > cos(data['t'], user['vector']) or random.randint(1, 5) == 1:
                     redisdb.db.rpush(user['main_id'], content_hash)
                     redisdb.db.ltrim(user['main_id'], 0, 199)
+
         except Exception as err:
             print '[%s]:%s' % (content_hash, str(err.message))
             traceback.print_exc()
