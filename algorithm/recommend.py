@@ -31,7 +31,7 @@ def update_users():
     global users
     import time
     while 1:
-        users = list(mongodb.db.find({}, {'main_id': 1, 'vector': 1, 'thr': 1}))
+        users = list(mongodb.db.merger_info.find({}, {'main_id': 1, 'vector': 1, 'thr': 1}))
         time.sleep(600)
 
 
