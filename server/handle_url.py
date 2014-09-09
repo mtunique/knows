@@ -83,23 +83,24 @@ class UserHandler(tornado.web.RequestHandler):
                                                    'uid': self.request.arguments['uid'][0]})
         if db_info:
             main_id = db_info['main_id']
+            vector = main_id['vector']
         else:
             main_id = k_user.create_id(self.request.arguments['way'][0]+self.request.arguments['uid'][0])
+            vector = [0] * 20
 
         info = {'way': self.request.arguments['way'][0],
                 'uid': self.request.arguments['uid'][0],
                 'name': self.request.arguments['name'][0],
                 'token': self.request.arguments['token'][0],
                 'main_id': main_id,
-                'vector': [0] * 20}
+                'vector': vector}
 
         mongodb.db.merger_info.update({'way': self.request.arguments['way'][0],
                                        'uid': self.request.arguments['uid'][0]},
                                       {'$set': info},
                                       upsert=True)
         self.write(json.dumps({'_id': main_id,
-                               'merger_info': list(mongodb.db.merger_info.find({'way': self.request.arguments['way'][0],
-                               'uid': self.request.arguments['uid'][0]}, {'_id': 0}))}))
+                               'isregister': str(not db_info == None)}))
 
     @handle_err
     def post(self):
