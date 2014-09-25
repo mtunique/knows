@@ -11,7 +11,7 @@ import knows_users as k_user
 sys.path.append(os.path.join(os.path.abspath('..'), 'algorithm'))
 from std_functions import cos
 
-TAG_VECTOR = mongodb.db2.tag_vector.find_one({}, {'_id': 0})
+TAG_VECTOR = mongodb.db.tag_vector.find_one({}, {'_id': 0})
 
 
 def handle_err(func):
@@ -83,7 +83,7 @@ class UserHandler(tornado.web.RequestHandler):
                                                    'uid': self.request.arguments['uid'][0]})
         if db_info:
             main_id = db_info['main_id']
-            vector = main_id['vector']
+            vector = db_info['vector']
         else:
             main_id = k_user.create_id(self.request.arguments['way'][0]+self.request.arguments['uid'][0])
             vector = [0] * 20
@@ -128,7 +128,7 @@ class FirstInfoHandler(tornado.web.RequestHandler):
     def post(self):
         info = json.loads(self.request.body)
 
-        data = mongodb.db.merger_info.find_one({'main_id': info['uid']})
+        data = mongodb.db.merger_info.find_one({'uid': info['uid']})
         vector = data['vector']
 
         global TAG_VECTOR

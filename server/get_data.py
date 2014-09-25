@@ -29,10 +29,13 @@ def get_content(data):
 def get_list_from_uid(user, time, limit=15):
     try:
         ids_list = redisdb.db.lrange(user, 0, limit-1)
+        if not ids_list:
+            ids_list = redisdb.db.lrange('base_list', 0, limit-1)
     except Exception:
         print_exc()
         return []
     return ids_list_to_article_list(ids_list, time, limit)
+
 
 
 def get_collect_list(uid, time):

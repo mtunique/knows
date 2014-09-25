@@ -13,6 +13,9 @@ def main():
     import random
     while True:
         tmp, content_hash = redisdb.db.brpop('s_content')
+        if random.randint(1, 5) == 1:
+            redisdb.db.rpush('base_list', content_hash)
+            redisdb.db.ltrim('base_list', 0, 199)
         try:
             data = mongodb.db.v_content.find_one({'_id': content_hash}, {'t': 1})
 
