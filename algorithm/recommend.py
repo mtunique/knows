@@ -18,8 +18,8 @@ def main():
 
             for user in users:
                 if user['thr'] > cos(data['t'], user['vector']) or random.randint(1, 5) == 1:
-                    redisdb.db.rpush(user['main_id'], content_hash)
-                    redisdb.db.ltrim(user['main_id'], 0, 199)
+                    redisdb.db.rpush(user['uid'], content_hash)
+                    redisdb.db.ltrim(user['uid'], 0, 199)
 
         except Exception as err:
             print '[%s]:%s' % (content_hash, str(err.message))
@@ -40,6 +40,7 @@ if __name__ == '__main__':
     outfile = open('recommend.log', 'w')
     sys.stderr = outfile
     sys.stdout = outfile
-    users = []
+    users = list(mongodb.db.merger_info.find({}, {'main_id': 1, 'vector': 1, 'thr': 1}))
     thread = threading.Thread(target=update_users)
+    thread.start()
     main()
