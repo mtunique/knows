@@ -44,6 +44,7 @@ class ListHandler(tornado.web.RequestHandler):
 class ArticleHandler(tornado.web.RequestHandler):
     @handle_err
     def get(self):
+        user_like(self.request.arguments['user'][0], self.request.arguments['hash'][0])
         self.write(get_content(self.request.arguments['hash'][0]))
 
 
@@ -60,6 +61,7 @@ class CollectHandler(tornado.web.RequestHandler):
 class LikeHandler(tornado.web.RequestHandler):
     @handle_err
     def get(self):
+        user_collect(self.request.arguments['uid'][0], self.request.arguments['hash'][0])
         tp = ''
         if self.request.arguments['type'][0] == '1':
             tp = '$addToSet'
@@ -99,7 +101,7 @@ class UserHandler(tornado.web.RequestHandler):
                                        'uid': self.request.arguments['uid'][0]},
                                       {'$set': info},
                                       upsert=True)
-        self.write(json.dumps({'_id': main_id,
+        self.write(json.dumps({'_id': info['uid'],
                                'isregister': str(not db_info == None)}))
 
     @handle_err
@@ -119,7 +121,7 @@ class TagHandler(tornado.web.RequestHandler):
 class DelHandler(tornado.web.RequestHandler):
     @handle_err
     def get(self):
-        pass
+        user_dislike(self.request.arguments['uid'][0], self.request.arguments['hash'][0])
 
 
 class FirstInfoHandler(tornado.web.RequestHandler):

@@ -14,14 +14,14 @@ def main():
     while True:
         tmp, content_hash = redisdb.db.brpop('s_content')
         if random.randint(1, 5) == 1:
-            redisdb.db.rpush('base_list', content_hash)
+            redisdb.db.lpush('base_list', content_hash)
             redisdb.db.ltrim('base_list', 0, 199)
         try:
             data = mongodb.db.v_content.find_one({'_id': content_hash}, {'t': 1})
 
             for user in users:
                 if user['thr'] > cos(data['t'], user['vector']) or random.randint(1, 5) == 1:
-                    redisdb.db.rpush(user['uid'], content_hash)
+                    redisdb.db.lpush(user['uid'], content_hash)
                     redisdb.db.ltrim(user['uid'], 0, 199)
 
         except Exception as err:

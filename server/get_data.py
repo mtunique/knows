@@ -31,11 +31,15 @@ def get_list_from_uid(user, time, limit=15):
         ids_list = redisdb.db.lrange(user, 0, limit-1)
         if not ids_list:
             ids_list = redisdb.db.lrange('base_list', 0, limit-1)
+        last_time = db.article.find_one({'_id': ids_list[-1]})
+        dislike_list = list(db.dislike.find({'uid': user}))
+        ids_list = list(ids_list)
+        for article in dislike_list:
+            ids_list.remove(article['hash'])
     except Exception:
         print_exc()
         return []
     return ids_list_to_article_list(ids_list, time, limit)
-
 
 
 def get_collect_list(uid, time):
