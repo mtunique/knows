@@ -44,6 +44,6 @@ if __name__ == '__main__':
     sys.stderr = outfile
     sys.stdout = outfile
     users = list(mongodb.db.merger_info.find({}, {'main_id': 1, 'vector': 1, 'thr': 1}))
-    thread = threading.Thread(target=update_users)
+    thread = threading.Thread(target=update_users, args=())
     thread.start()
     main()

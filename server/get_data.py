@@ -28,14 +28,16 @@ def get_content(data):
 
 def get_list_from_uid(user, time, limit=15):
     try:
-        ids_list = redisdb.db.lrange(user, 0, limit-1)
+        ids_list = redisdb.db.lrange(user, 0, 199)
         if not ids_list:
-            ids_list = redisdb.db.lrange('base_list', 0, limit-1)
+            ids_list = redisdb.db.lrange('base_list', 0, 199)
         last_time = db.article.find_one({'_id': ids_list[-1]})
         dislike_list = list(db.dislike.find({'uid': user}))
         ids_list = list(ids_list)
         for article in dislike_list:
-            ids_list.remove(article['hash'])
+            str_hash = article['hash'].encode()
+            if str_hash in ids_list:
+                ids_list.remove(str_hash)
     except Exception:
         print_exc()
         return []
