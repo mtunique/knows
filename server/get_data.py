@@ -29,8 +29,8 @@ def get_content(data):
 def get_list_from_uid(user, time, limit=15):
     try:
         ids_list = redisdb.db.lrange(user, 0, 199)
-        if not ids_list:
-            ids_list = redisdb.db.lrange('base_list', 0, 199)
+        defualt_list = redisdb.db.lrange('base_list', 0, 199)
+        ids_list += defualt_list
         last_time = db.article.find_one({'_id': ids_list[-1]})
         dislike_list = list(db.dislike.find({'uid': user}))
         ids_list = list(ids_list)
