@@ -20,10 +20,12 @@ def main():
             data = mongodb.db.v_content.find_one({'_id': content_hash}, {'t': 1})
 
             for user in users:
-                if user['thr'] > cos(data['t'], user['vector']) or random.randint(1, 5) == 1:
-                    redisdb.db.lpush(user['uid'], content_hash)
-                    redisdb.db.ltrim(user['uid'], 0, 199)
-
+                try:
+                    if user['thr'] > cos(data['t'], user['vector']) or random.randint(1, 5) == 1:
+                        redisdb.db.lpush(user['uid'], content_hash)
+                        redisdb.db.ltrim(user['uid'], 0, 199)
+                except:
+                    pass
         except Exception as err:
             print '[%s]:%s' % (content_hash, str(err.message))
             traceback.print_exc()
