@@ -25,7 +25,7 @@ def main():
                         redisdb.db.lpush(user['uid'], content_hash)
                         redisdb.db.ltrim(user['uid'], 0, 199)
                 except:
-                    pass
+                    redisdb.db.lpush('recommend_error_user', user['uid'])
         except Exception as err:
             print '[%s]:%s' % (content_hash, str(err.message))
             traceback.print_exc()
