@@ -1,4 +1,5 @@
 knows
+[![status](https://sourcegraph.com/api/repos/github.com/mtunique/knows/.badges/status.png)](https://sourcegraph.com/github.com/mtunique/knows)
 =====
 IT新闻 博客 整合APP。
 智能推荐。
