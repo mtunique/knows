@@ -5,4 +5,4 @@ redis
 numpy
 tornado
 jieba
-bs4
+beautifulsoup4
