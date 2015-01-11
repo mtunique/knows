@@ -1,7 +1,7 @@
 requests
 scrapy==0.24.4
 pymongo
-redisdb
+redis
 numpy
 tornado
 jieba
