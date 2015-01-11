@@ -12,8 +12,9 @@ CLASSES_SET = {
 }
 
 # vector of source and trained
-vector_filepath = 'Bayes/source_text/tags_real.txt'
-tgt_vector_filepath = 'Bayes/source_text/trained_vector.json'
+import os
+vector_filepath = os.getcwd()+'/algorithm/Bayes/source_text/tags_real.txt'
+tgt_vector_filepath = os.getcwd()+'/algorithm/Bayes/source_text/trained_vector.json'
 
 
 # ============== DEBUG ONLY =================

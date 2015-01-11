@@ -24,6 +24,7 @@ def predict():
         nbc.bayes_classify(doc=filepath)
         print "======================="
 
+
 def test():
     nbc = NaiveBayesClassifier()
     nbc.easy_init()
