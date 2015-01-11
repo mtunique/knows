@@ -1,6 +1,6 @@
 requests
 scrapy==0.24.4
-pymongodb
+pymongo
 redisdb
 numpy
 tornado
