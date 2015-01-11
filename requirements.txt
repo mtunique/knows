@@ -1,0 +1,8 @@
+requests
+scrapy==0.24.4
+pymongodb
+redisdb
+numpy
+tornado
+jieba
+bs4
