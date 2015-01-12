@@ -14,3 +14,7 @@ IT新闻 博客 整合APP。
 ##redis
 + content
 + s_content
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/mtunique/knows/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
