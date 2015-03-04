@@ -18,3 +18,7 @@ IT新闻 博客 整合APP。
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/mtunique/knows/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/mtunique/knows/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
